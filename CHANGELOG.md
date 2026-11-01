@@ -9,8 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- The repository moved to [MiracleForest/Lepton](https://github.com/MiracleForest/Lepton); links point there. The lip
-  package stays `github.com/LiteLDev/Lepton`.
+- The repository moved to [MiracleForest/Lepton](https://github.com/MiracleForest/Lepton); links point there.
+- The lip package is now `github.com/MiracleForest/Lepton` (was `github.com/LiteLDev/Lepton`). Installing it by the new
+  path needs lip 0.35.0 or newer. To move an existing install, run `lip update` with a lip that supports renamed
+  packages, or run `lip uninstall github.com/LiteLDev/Lepton[#client]` and then
+  `lip install github.com/MiracleForest/Lepton[#client]`. The config in `plugins/Lepton/config/` (server) or
+  `mods/Lepton/config/` (client) is kept, as it is listed in `preserve_files`. Version 0.1.0 stays installable at its old
+  path.
 
 ## [0.1.0] - 2026-10-30
 
