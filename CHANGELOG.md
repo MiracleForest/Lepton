@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The repository moved to [MiracleForest/Lepton](https://github.com/MiracleForest/Lepton); links point there. The lip
+  package stays `github.com/LiteLDev/Lepton`.
+
 ## [0.1.0] - 2026-10-30
 
 First release: the modules of Quark 4.1-488 on Minecraft Bedrock 1.26.51 (LeviLamina 26.51.x), for
@@ -164,5 +169,5 @@ container screens in place of the client mod's screens. Bedrock limits are liste
 - On a dedicated server, chat messages the server builds (such as the `/give` feedback) show Lepton's
   block and item names instead of their translation keys.
 
-[Unreleased]: https://github.com/LiteLDev/Lepton/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/LiteLDev/Lepton/releases/tag/v0.1.0
+[Unreleased]: https://github.com/MiracleForest/Lepton/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/MiracleForest/Lepton/releases/tag/v0.1.0
