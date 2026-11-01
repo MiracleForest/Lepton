@@ -1,7 +1,7 @@
 # Lepton
 
-[![Build](https://github.com/LiteLDev/Lepton/actions/workflows/build.yml/badge.svg)](https://github.com/LiteLDev/Lepton/actions/workflows/build.yml)
-[![License](https://img.shields.io/github/license/LiteLDev/Lepton)](COPYING.LESSER)
+[![Build](https://github.com/MiracleForest/Lepton/actions/workflows/build.yml/badge.svg)](https://github.com/MiracleForest/Lepton/actions/workflows/build.yml)
+[![License](https://img.shields.io/github/license/MiracleForest/Lepton)](COPYING.LESSER)
 
 Lots of small things that make vanilla better, each one a module you can turn off. Lepton brings Vazkii's Java mod [Quark](https://modrinth.com/mod/quark) to Bedrock, for dedicated servers and single-player worlds.
 
@@ -32,7 +32,7 @@ lip install github.com/LiteLDev/Lepton           # dedicated server
 lip install github.com/LiteLDev/Lepton#client    # client
 ```
 
-Or download the zip from the [latest release](https://github.com/LiteLDev/Lepton/releases/latest) and extract it next to `LeviLamina/`:
+Or download the zip from the [latest release](https://github.com/MiracleForest/Lepton/releases/latest) and extract it next to `LeviLamina/`:
 
 | Where | Zip | Folder |
 | --- | --- | --- |
