@@ -28,8 +28,8 @@ You need Minecraft Bedrock Edition **1.26.51** for Windows (x64) with LeviLamina
 With [lip](https://github.com/LiteLDev/lip):
 
 ```sh
-lip install github.com/LiteLDev/Lepton           # dedicated server
-lip install github.com/LiteLDev/Lepton#client    # client
+lip install github.com/MiracleForest/Lepton           # dedicated server
+lip install github.com/MiracleForest/Lepton#client    # client
 ```
 
 Or download the zip from the [latest release](https://github.com/MiracleForest/Lepton/releases/latest) and extract it next to `LeviLamina/`:
