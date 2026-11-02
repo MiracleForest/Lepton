@@ -1,5 +1,7 @@
 # Lepton
 
+<img src="docs/logo.png" alt="" width="128" align="right">
+
 [![Build](https://github.com/MiracleForest/Lepton/actions/workflows/build.yml/badge.svg)](https://github.com/MiracleForest/Lepton/actions/workflows/build.yml)
 [![License](https://img.shields.io/github/license/MiracleForest/Lepton)](COPYING.LESSER)
 
