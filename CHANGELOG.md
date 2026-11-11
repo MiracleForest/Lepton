@@ -30,7 +30,9 @@ First beta of 0.2.0. Please report anything that behaves differently from 0.1.1.
   variant earlier releases of the client mod were installed as) are the newest line, so `lip update` and LeviLauncher
   keep working and move you to 26.60.
   - To stay on Minecraft 1.26.51, install `github.com/MiracleForest/Lepton#26_51`, or pick the `26_51` variant on the
-    mod's page in LeviLauncher.
+    mod's page in LeviLauncher. If Lepton is already installed, uninstall it first
+    (`lip uninstall github.com/MiracleForest/Lepton`, or `...#client` on a client): lip installs only one variant of
+    a package at a time. Your settings are kept.
   - On a client, your settings in `mods/Lepton/config/` are kept either way.
   - On a dedicated server, LeviLamina 26.60 loads mods from `mods/` instead of `plugins/`, so the 26.60 build is
     installed into `mods/Lepton/`. Copy your settings from `plugins/Lepton/config/` to `mods/Lepton/config/` when you

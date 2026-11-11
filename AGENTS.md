@@ -158,7 +158,7 @@ pwsh -NoProfile -File tools/e2e/client/run.ps1 -Scenario smoke       # headless 
   Always build through `tools/build.ps1`, never with a bare `xmake build` (it would bypass the slots).
 - `git config --global core.longpaths true` is required (long LeviLamina header paths).
 - `clang-cl` must be on PATH (`C:\Program Files\LLVM\bin`).
-- `xmake-requires.lock` is committed; it holds entries for both target types.
+- `xmake-requires.lock` is generated from `locks/<line>.lock` (see above); each lock holds entries for both target types.
 - In game: `/quark selftest ["glob"]` (op or server console). Quote globs: `quark selftest "<unit>.*"`.
   Output lines: `SELFTEST PASS <name>`, `SELFTEST FAIL <name>: <reason>`, `SELFTEST DONE pass=<N> fail=<M>`.
 - Log contract: `Lepton enabled` on enable; `Lepton world ready` when a world is available.
