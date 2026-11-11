@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0-beta.1] - 2026-11-11
+
+First beta of 0.2.0. Please report anything that behaves differently from 0.1.1.
+
 ### Added
 
 - Support for **Minecraft 1.26.60** with LeviLamina 26.60.x, on dedicated servers and clients. It is now the version
@@ -211,6 +215,7 @@ container screens in place of the client mod's screens. Bedrock limits are liste
 - On a dedicated server, chat messages the server builds (such as the `/give` feedback) show Lepton's
   block and item names instead of their translation keys.
 
-[Unreleased]: https://github.com/MiracleForest/Lepton/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/MiracleForest/Lepton/compare/v0.2.0-beta.1...HEAD
+[0.2.0-beta.1]: https://github.com/MiracleForest/Lepton/compare/v0.1.1...v0.2.0-beta.1
 [0.1.1]: https://github.com/MiracleForest/Lepton/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/MiracleForest/Lepton/releases/tag/v0.1.0
