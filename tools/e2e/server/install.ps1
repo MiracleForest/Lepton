@@ -60,7 +60,7 @@ try {
     } finally { Pop-Location }
 
     if (-not (Test-Path (Join-Path $tmp 'bedrock_server_mod.exe'))) { throw "lip finished but bedrock_server_mod.exe is missing in $tmp" }
-    # Mods live in plugins\ on LeviLamina 26.x servers (PreLoaderConfig modsPath); older ones use mods\.
+    # Mods live in plugins\ on LeviLamina 26.51 servers and in mods\ on 26.60 (PreLoaderConfig modsPath).
     if (-not (Test-Path (Join-Path $tmp 'plugins\LeviLamina')) -and -not (Test-Path (Join-Path $tmp 'mods\LeviLamina'))) {
         throw "LeviLamina was not installed into $tmp"
     }

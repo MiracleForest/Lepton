@@ -47,6 +47,7 @@
 #include "feature/mobtweaks/MobTweaks.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
@@ -401,7 +402,7 @@ int absorbWater(BlockSource& region, BlockPos const& start, int maxDrain, int ma
                        nameOf(extra) == "minecraft:water" || nameOf(extra) == "minecraft:flowing_water") {
                 matched = region.setExtraBlock(p, air, 3); // un-waterlog
             } else if (n == "minecraft:kelp" || n == "minecraft:seagrass") {
-                matched = level && level->destroyBlock(region, p, true, BlockChangeContext{});
+                matched = level && lp::game::destroyBlock(*level, region, p, true, BlockChangeContext{});
             }
         }
         if (!matched) continue;

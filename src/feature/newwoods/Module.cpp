@@ -22,6 +22,7 @@
 #include "mc/network/MinecraftPackets.h"
 #include "mc/network/packet/PlaySoundPacket.h"
 #include "mc/world/actor/player/Player.h"
+#include "mc/world/item/Item.h"
 #include "mc/world/item/ItemStack.h"
 #include "mc/world/item/ItemStackBase.h"
 #include "mc/world/item/crafting/Recipes.h"
@@ -258,6 +259,34 @@ LL_TYPE_INSTANCE_HOOK(
     origin(copy, upcoming, jsonVersion);
 }
 
+/// The vanilla wooden item with the same Java burn time as `ticks` (null stack: none loaded).
+ItemStack const& burnProxy(int ticks) {
+    static ItemStack const planks = game::makeItem("minecraft:oak_planks");
+    static ItemStack const slab   = game::makeItem("minecraft:oak_slab");
+    static ItemStack const door   = game::makeItem("minecraft:wooden_door");
+    static ItemStack const button = game::makeItem("minecraft:wooden_button");
+    return ticks >= 300 ? planks : ticks >= 200 ? door : ticks >= 150 ? slab : button;
+}
+
+#if LP_LL_VERSION >= 2660
+// 26.60 has no getBurnDuration(ItemStackBase const&, float): hook the overload that takes the item.
+LL_STATIC_HOOK(
+    BurnDurationHook,
+    ll::memory::HookPriority::Normal,
+    &FurnaceBlockActor::getItemBurnDuration,
+    float,
+    Item const& item,
+    float       burnInterval
+) {
+    int ticks = fuelTicks(item.mFullName->getString());
+    if (ticks > 0) {
+        // burn like the vanilla wooden item with the same Java burn time
+        ItemStack const& proxy = burnProxy(ticks);
+        if (!proxy.isNull()) return origin(*proxy.mItem, burnInterval);
+    }
+    return origin(item, burnInterval);
+}
+#else
 LL_STATIC_HOOK(
     BurnDurationHook,
     ll::memory::HookPriority::Normal,
@@ -270,16 +299,13 @@ LL_STATIC_HOOK(
         int ticks = fuelTicks(item.getTypeName());
         if (ticks > 0) {
             // burn like the vanilla wooden item with the same Java burn time
-            static ItemStack const planks = game::makeItem("minecraft:oak_planks");
-            static ItemStack const slab   = game::makeItem("minecraft:oak_slab");
-            static ItemStack const door   = game::makeItem("minecraft:wooden_door");
-            static ItemStack const button = game::makeItem("minecraft:wooden_button");
-            ItemStack const& proxy = ticks >= 300 ? planks : ticks >= 200 ? door : ticks >= 150 ? slab : button;
+            ItemStack const& proxy = burnProxy(ticks);
             if (!proxy.isNull()) return origin(proxy, burnInterval);
         }
     }
     return origin(item, burnInterval);
 }
+#endif
 
 LL_STATIC_HOOK(
     FillChanceHook,

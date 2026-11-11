@@ -46,6 +46,7 @@
 #include "mc/world/level/Spawner.h"
 
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
@@ -244,7 +245,7 @@ void hitBlock(Rang& r, Actor& self, BlockSource& region, BlockPos const& pos, in
     auto* owner = playerById(r.owner);
     if (!owner || owner->isClientSide()) return;
     auto const& type     = typeOf(r.flame);
-    float       hardness = block.getBlockType().getDestroySpeed();
+    float       hardness = lp::game::hardness(block);
     if (hardness < 0) { // unbreakable (bedrock, barriers): Quark clanks
         clank(r, self, &region, &pos);
         return;
@@ -641,7 +642,7 @@ LL_TYPE_INSTANCE_HOOK(
     float,
     Block const& block
 ) {
-    if (isRang(game::itemId(this->getSelectedItem())) && block.getBlockType().getDestroySpeed() > 0) return 0.0f;
+    if (isRang(game::itemId(this->getSelectedItem())) && lp::game::hardness(block) > 0) return 0.0f;
     return origin(block);
 }
 

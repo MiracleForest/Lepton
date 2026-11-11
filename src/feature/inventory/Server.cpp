@@ -48,6 +48,7 @@
 #include "feature/inventory/Messages.h"
 #include "feature/inventory/Sorting.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
 #include "game/VirtualContainer.h"
@@ -751,9 +752,9 @@ LL_TYPE_INSTANCE_HOOK(
     Player,
     &Player::interact,
     InteractionResult,
-    ::Actor&      actor,
-    ::Vec3 const& location
+    LP_INTERACT_PARAMS
 ) {
+    if (!LP_INTERACT_MAINHAND) return origin(LP_INTERACT_ARGS);
     if (cfg().enableQuickArmorSwapping && !getLevel().isClientSide() && isSneaking() && !isSpectator() && !isCreative()
         && actor.getTypeName() == "minecraft:armor_stand") {
         swapArmorWithStand(*this, actor);
@@ -762,7 +763,7 @@ LL_TYPE_INSTANCE_HOOK(
         r.mSwing   = true;
         return r;
     }
-    return origin(actor, location);
+    return origin(LP_INTERACT_ARGS);
 }
 
 void processRestocks() {

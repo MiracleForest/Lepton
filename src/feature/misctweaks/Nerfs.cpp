@@ -286,6 +286,9 @@ std::atomic<int> gHugeMushrooms{0};
 
 namespace {
 
+#if LP_LL_VERSION < 2660
+// 26.60 no longer exports HugeMushroomFeature::placeFixed, nor anything else of the feature: the
+// mushroom nerf is not available there.
 bool isCap(Block const& b) {
     auto const& n = b.getTypeName();
     if (n != "minecraft:red_mushroom_block" && n != "minecraft:brown_mushroom_block") return false;
@@ -331,6 +334,7 @@ LL_TYPE_INSTANCE_HOOK(
     if (restored) log().debug("misctweaks: huge mushroom kept {} blocks", restored);
     return ok;
 }
+#endif
 
 // ---- tripwire hook dupe ------------------------------------------------------------------------------
 
@@ -414,7 +418,9 @@ void installNerfs() {
     RaidGardenHook::hook();
     BoatTickHook::hook();
     FallingTickHook::hook();
+#if LP_LL_VERSION < 2660
     MushroomPlaceHook::hook();
+#endif
     TripwireCalcHook::hook();
     VillageChunkHook::hook();
 }
@@ -422,7 +428,9 @@ void installNerfs() {
 void uninstallNerfs() {
     VillageChunkHook::unhook();
     TripwireCalcHook::unhook();
+#if LP_LL_VERSION < 2660
     MushroomPlaceHook::unhook();
+#endif
     FallingTickHook::unhook();
     BoatTickHook::unhook();
     RaidGardenHook::unhook();

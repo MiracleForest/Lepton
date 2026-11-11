@@ -12,6 +12,7 @@
 #include "feature/emotes/Emotes.h"
 #include "feature/emotes/EmotesConfig.h"
 #include "feature/emotes/PatTheDogs.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Forms.h"
 #include "game/Inventory.h"
@@ -159,7 +160,7 @@ LP_REGISTER_SELFTEST("emotes.pat_wolf", [](Context& ctx) -> ll::coro::CoroTask<>
     co_await ctx.ticks(2);
     wolf = lp::game::entities::find(wid);
     ctx.require(wolf && wolf->isTame(), "the wolf is tamed");
-    auto r = p.interact(*wolf, wolf->getPosition());
+    auto r = lp::game::interact(p, *wolf, wolf->getPosition());
     ctx.check(r.mSuccess, "sneak + empty hand pets a tamed wolf (through the interact hook)");
     ctx.check(!wolf->isSitting(), "petting doesn't make it sit");
     p.setSneaking(false);

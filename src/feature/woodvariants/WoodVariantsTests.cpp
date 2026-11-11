@@ -24,6 +24,7 @@
 #include "feature/woodvariants/WoodVariants.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Items.h"
 #include "mod/Config.h"
 #include "selftest/SelfTest.h"
@@ -306,8 +307,8 @@ LP_REGISTER_SELFTEST("woodvariants.carpet_compost", [](Context& ctx) {
 });
 
 LP_REGISTER_SELFTEST("woodvariants.fuel", [](Context& ctx) {
-    float ladder = FurnaceBlockActor::getBurnDuration(lp::game::makeItem("lepton:spruce_ladder"), 200.f);
-    float planks = FurnaceBlockActor::getBurnDuration(lp::game::makeItem("minecraft:oak_planks"), 200.f);
+    float ladder = lp::game::burnDuration(lp::game::makeItem("lepton:spruce_ladder"), 200.f);
+    float planks = lp::game::burnDuration(lp::game::makeItem("minecraft:oak_planks"), 200.f);
     ctx.check(ladder > 0.f && ladder == planks, "variant ladders burn like planks: " + std::to_string(ladder) + " vs " + std::to_string(planks));
 });
 

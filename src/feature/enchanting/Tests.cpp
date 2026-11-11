@@ -35,6 +35,7 @@
 #include "feature/enchanting/Tomes.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Forms.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
@@ -676,9 +677,9 @@ LP_REGISTER_SELFTEST("enchanting.rune_duplication", [](Context& ctx) {
     ctx.check(!tagged("lepton:waxed_red_corundum"), "waxed corundum is not in the tag (as in Quark)");
     if (auto const* r = find("lepton:rune_duplication")) {
         auto const& corner = r->getIngredient(0, 0);
-        ctx.check(corner.sameItem(lp::game::makeItem("lepton:violet_corundum"), false), "corundum fits the corners");
-        ctx.check(!corner.sameItem(lp::game::makeItem("minecraft:amethyst_block"), false), "amethyst does not fit the corundum recipe");
-        ctx.check(r->getIngredient(1, 1).sameItem(lp::game::makeItem(fe::kRuneId), false), "the rune template in the middle");
+        ctx.check(lp::game::descriptorMatches(corner, lp::game::makeItem("lepton:violet_corundum")), "corundum fits the corners");
+        ctx.check(!lp::game::descriptorMatches(corner, lp::game::makeItem("minecraft:amethyst_block")), "amethyst does not fit the corundum recipe");
+        ctx.check(lp::game::descriptorMatches(r->getIngredient(1, 1), lp::game::makeItem(fe::kRuneId)), "the rune template in the middle");
         auto const& out = r->getResultItems();
         ctx.check(out.size() == 1 && lp::game::itemId(out[0]) == fe::kRuneId && out[0].mCount == 2, "two rune templates");
     } else {

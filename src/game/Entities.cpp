@@ -14,6 +14,7 @@
 #include "mc/world/phys/AABB.h"
 
 #include "game/Blocks.h"
+#include "game/Compat.h"
 
 namespace lp::game::entities {
 
@@ -61,9 +62,7 @@ std::vector<Actor*> ofType(std::string_view type, int dim) {
 }
 
 bool triggerEvent(Actor& actor, std::string const& event) {
-    VariantParameterList params{};
-    params.mSelf = &actor;
-    return actor.executeEvent(event, params);
+    return executeActorEvent(actor, event);
 }
 
 void despawn(Actor& actor) { actor.despawn(); }

@@ -33,6 +33,7 @@
 #include "core/GlobalPos.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Shapes.h"
 #include "game/WorldDb.h"
 #include "mod/Config.h"
@@ -123,7 +124,7 @@ void queue(BlockSource& region, BlockPos const& pos) {
 
 void popBlock(BlockSource& region, BlockPos const& pos) {
     BlockChangeContext ctx{};
-    region.getLevel().destroyBlock(region, pos, true, ctx);
+    lp::game::destroyBlock(region.getLevel(), region, pos, true, ctx);
 }
 
 bool setIfChanged(BlockSource& region, BlockPos const& pos, Block const& cur, Block const* next) {

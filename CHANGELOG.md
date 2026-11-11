@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0-beta.1] - 2026-11-11
+
+First beta of 0.2.0. Please report anything that behaves differently from 0.1.1.
+
+### Added
+
+- Support for **Minecraft 1.26.60** with LeviLamina 26.60.x, on dedicated servers and clients. It is now the version
+  Lepton is installed as by default. Minecraft 1.26.51 with LeviLamina 26.51.x is still supported and gets its own
+  build of every release.
+  - Lepton is compiled against one LeviLamina line at a time, so each release now ships one download per line and side:
+    `lepton-server-win-x64-ll26.60.zip`, `lepton-client-win-x64-ll26.60.zip`, `lepton-server-win-x64-ll26.51.zip` and
+    `lepton-client-win-x64-ll26.51.zip`.
+
+### Changed
+
+- The package is now described by `lip.toml` of format 4 instead of `tooth.json`, so installing it needs
+  [lip](https://github.com/LiteLDev/lip) **0.40.0** or later, or a LeviLauncher that reads it. Older releases stay
+  installable with older lip.
+- Each supported LeviLamina line is a variant named after it: `26_60` for 26.60.x and `26_51` for 26.51.x, each with a
+  server and a client build; lip installs the one of the side it installs to. The default variant, and `client` (the
+  variant earlier releases of the client mod were installed as) are the newest line, so `lip update` and LeviLauncher
+  keep working and move you to 26.60.
+  - To stay on Minecraft 1.26.51, install `github.com/MiracleForest/Lepton#26_51`, or pick the `26_51` variant on the
+    mod's page in LeviLauncher. If Lepton is already installed, uninstall it first
+    (`lip uninstall github.com/MiracleForest/Lepton`, or `...#client` on a client): lip installs only one variant of
+    a package at a time. Your settings are kept.
+  - On a client, your settings in `mods/Lepton/config/` are kept either way.
+  - On a dedicated server, LeviLamina 26.60 loads mods from `mods/` instead of `plugins/`, so the 26.60 build is
+    installed into `mods/Lepton/`. Copy your settings from `plugins/Lepton/config/` to `mods/Lepton/config/` when you
+    update the server to 26.60. The `26_51` variant keeps using `plugins/Lepton/`.
+- The downloads are now lip mod archives: the files sit at the root of the ZIP instead of inside a `Lepton/` folder.
+  Extract one into a `Lepton` folder (`mods/Lepton/`, or `plugins/Lepton/` on a 1.26.51 server).
+
+### Known issues
+
+- On Minecraft 1.26.60, screens that Lepton shows as a dispenser or a double chest (the feeding trough's 3x3 menu,
+  double variant chests) open as a single chest screen, because 1.26.60 offers mods no way to open those block
+  screens; the slots past the first 27 of a double variant chest are kept but not shown. The other screens are
+  unchanged, and 1.26.51 is not affected.
+- On Minecraft 1.26.60, the `disableMushroomBlockRemoval` nerf has no effect: 1.26.60 exposes nothing of the huge
+  mushroom feature to hook.
+
 ## [0.1.1] - 2026-11-01
 
 ### Changed
@@ -175,6 +217,7 @@ container screens in place of the client mod's screens. Bedrock limits are liste
 - On a dedicated server, chat messages the server builds (such as the `/give` feedback) show Lepton's
   block and item names instead of their translation keys.
 
-[Unreleased]: https://github.com/MiracleForest/Lepton/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/MiracleForest/Lepton/compare/v0.2.0-beta.1...HEAD
+[0.2.0-beta.1]: https://github.com/MiracleForest/Lepton/compare/v0.1.1...v0.2.0-beta.1
 [0.1.1]: https://github.com/MiracleForest/Lepton/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/MiracleForest/Lepton/releases/tag/v0.1.0

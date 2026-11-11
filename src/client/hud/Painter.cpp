@@ -31,6 +31,7 @@
 #include "mc/world/item/ItemStackBase.h"
 
 #include "client/Client.h"
+#include "game/Compat.h"
 
 namespace lp::client::hud {
 
@@ -82,7 +83,7 @@ void Painter::text(std::string_view s, float x, float y, Color c, float scale, b
     TextMeasureData  tmd{scale, 0.f, shadow, true, false, ::ui::TextAlignment::Left};
     CaretMeasureData caret{-1, false};
     auto             font = client->getFontHandle();
-    mRc.drawText(font.getFont(), area, std::string(s), mc(c), c.a, ::ui::TextAlignment::Left, tmd, caret);
+    mRc.drawText(lp::game::fontOf(font), area, std::string(s), mc(c), c.a, ::ui::TextAlignment::Left, tmd, caret);
     mText = true;
 }
 
@@ -90,7 +91,7 @@ float Painter::textWidth(std::string_view s, float scale) const {
     auto* client = client::currentClient();
     if (!client) return 0;
     auto font = client->getFontHandle();
-    return static_cast<float>(mRc.getLineLength(font.getFont(), std::string(s), scale, false));
+    return static_cast<float>(mRc.getLineLength(lp::game::fontOf(font), std::string(s), scale, false));
 }
 
 void Painter::item(ItemStack const& stack, float x, float y, float scale, int countText, bool durability) {

@@ -44,6 +44,7 @@
 #include "feature/newstones/Noise.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "mod/Log.h"
 
 namespace lp::feature::newstones {
@@ -655,7 +656,7 @@ bool solidRender(Block const& b) { return !b.isAir() && static_cast<bool>(b.mCac
 
 void styleFill(BlockSource& region, BlockPos const& pos, JavaRandom& random, Plan const& p, PermafrostGen const& g) {
     auto const& state = region.getBlock(pos);
-    if (state.getBlockType().getDestroySpeed() < 0) return; // unbreakable
+    if (lp::game::hardness(state) < 0) return; // unbreakable
     bool inTag      = hasType(p.undergroundReplaceable, state);
     bool canReplace = inTag || canBeReplaced(region, pos, state);
     bool solid      = solidRender(state);

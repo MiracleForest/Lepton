@@ -205,7 +205,12 @@ LL_TYPE_INSTANCE_HOOK(
 ) {
     if (killsVillagerOnNormal(*this, source, damage) && zombify(*this)) {
         ActorHurtResult none;
+#if LP_LL_VERSION >= 2660
+        none.mType                 = ActorHurtResult::Type::NotHurt;
+        none.mDamageAmount         = std::nullopt;
+#else
         none.mHurtOrDamage         = false;
+#endif
         none.mShouldAllowKnockback = false;
         return none;
     }

@@ -1,5 +1,5 @@
 # Config for the stones-disabled scenario: SturdyStone and the MoreStoneVariants bricks off.
-$cfgDir = Join-Path $script:SlotDir "plugins/$script:ModName/config"
+$cfgDir = Join-Path $script:SlotDir "$(Get-ModsDirName $script:SlotDir)/$script:ModName/config"
 New-Item -ItemType Directory -Force $cfgDir | Out-Null
 [ordered]@{
     version = 1; enableMoreStoneVariants = $true; enableBricks = $false; enableChiseledBricks = $true; enablePillar = $true

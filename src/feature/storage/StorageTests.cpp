@@ -41,6 +41,7 @@
 #include "feature/storage/Storage.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Items.h"
 #include "mod/Config.h"
@@ -209,9 +210,9 @@ LP_REGISTER_SELFTEST("storage.gates", [](Context& ctx) {
 // ---- CompressedBlocks / UtilityRecipes ------------------------------------------------------------
 
 LP_REGISTER_SELFTEST("storage.fuel", [](Context& ctx) {
-    float ref = FurnaceBlockActor::getBurnDuration(lp::game::makeItem("minecraft:coal"), 200.f);
+    float ref = lp::game::burnDuration(lp::game::makeItem("minecraft:coal"), 200.f);
     ctx.require(ref > 0.f, "coal burns");
-    auto ratio = [&](char const* id) { return FurnaceBlockActor::getBurnDuration(lp::game::makeItem(id), 200.f) / ref; };
+    auto ratio = [&](char const* id) { return lp::game::burnDuration(lp::game::makeItem(id), 200.f) / ref; };
     ctx.check(std::abs(ratio("lepton:charcoal_block") - 10.f) < 0.01f, "charcoal block = 16000 ticks: " + std::to_string(ratio("lepton:charcoal_block")));
     ctx.check(std::abs(ratio("lepton:blaze_lantern") - 15.f) < 0.01f, "blaze lantern = 24000 ticks");
     ctx.check(std::abs(ratio("lepton:stick_block") - 900.f / 1600.f) < 0.01f, "stick stack = 900 ticks");
@@ -219,8 +220,8 @@ LP_REGISTER_SELFTEST("storage.fuel", [](Context& ctx) {
     ctx.check(std::abs(ratio("lepton:red_stool") - 300.f / 1600.f) < 0.01f, "stools = 300 ticks");
     ctx.check(std::abs(ratio("minecraft:torch") - 400.f / 1600.f) < 0.01f, "torches = 400 ticks");
     ctx.check(ratio("lepton:gunpowder_sack") <= 0.f, "sacks are no fuel");
-    float blast = FurnaceBlockActor::getBurnDuration(lp::game::makeItem("lepton:charcoal_block"), 100.f);
-    ctx.check(std::abs(blast / FurnaceBlockActor::getBurnDuration(lp::game::makeItem("minecraft:coal"), 100.f) - 10.f) < 0.01f, "same ratio in a blast furnace");    auto block = lp::game::makeItem("lepton:charcoal_block");
+    float blast = lp::game::burnDuration(lp::game::makeItem("lepton:charcoal_block"), 100.f);
+    ctx.check(std::abs(blast / lp::game::burnDuration(lp::game::makeItem("minecraft:coal"), 100.f) - 10.f) < 0.01f, "same ratio in a blast furnace");    auto block = lp::game::makeItem("lepton:charcoal_block");
     ctx.check(FurnaceBlockActor::isItemAllowedInFuelSlot(1, block, 1), "charcoal block fits the fuel slot");
     auto const* bi = block.mItem.get();
     ctx.check(bi && FurnaceBlockActor::getItemBurnDuration(*bi, 200.f) / ref > 9.9f, "getItemBurnDuration agrees");
@@ -356,20 +357,20 @@ LP_REGISTER_SELFTEST("storage.glass_shards", [](Context& ctx) -> ll::coro::CoroT
     killItems(ctx, p);
     ctx.require(put(ctx, p, "minecraft:glass"), "glass");
     BlockChangeContext cc{};
-    regionOf(ctx).getLevel().destroyBlock(regionOf(ctx), bp(p), true, cc);
+    lp::game::destroyBlock(regionOf(ctx).getLevel(), regionOf(ctx), bp(p), true, cc);
     co_await ctx.ticks(3);
     int n = countItems(ctx, p, "lepton:clear_shard");
     ctx.check(n >= 2 && n <= 4, "broken glass drops 2-4 glass shards, got " + std::to_string(n));
     killItems(ctx, p);
     ctx.require(put(ctx, p, "lepton:dirty_glass"), "dirty glass");
-    regionOf(ctx).getLevel().destroyBlock(regionOf(ctx), bp(p), true, cc);
+    lp::game::destroyBlock(regionOf(ctx).getLevel(), regionOf(ctx), bp(p), true, cc);
     co_await ctx.ticks(3);
     n = countItems(ctx, p, "lepton:dirty_shard");
     ctx.check(n >= 2 && n <= 4, "dirty glass drops dirty shards, got " + std::to_string(n));
     ctx.check(countItems(ctx, p, "lepton:dirty_glass") == 0, "not itself without silk touch");
     killItems(ctx, p);
     ctx.require(put(ctx, p, "lepton:dirty_glass_pane"), "dirty pane");
-    regionOf(ctx).getLevel().destroyBlock(regionOf(ctx), bp(p), true, cc);
+    lp::game::destroyBlock(regionOf(ctx).getLevel(), regionOf(ctx), bp(p), true, cc);
     co_await ctx.ticks(3);
     ctx.check(countItems(ctx, p, "lepton:dirty_glass_pane") == 0, "the pane drops nothing without silk touch");
     killItems(ctx, p);

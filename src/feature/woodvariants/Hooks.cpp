@@ -12,6 +12,7 @@
 #include "mc/deps/json/Value.h"
 #include "mc/world/actor/player/Player.h"
 #include "mc/world/containers/managers/models/EnchantingContainerManagerModel.h"
+#include "mc/world/item/Item.h"
 #include "mc/world/item/ItemStack.h"
 #include "mc/world/item/ItemStackBase.h"
 #include "mc/world/item/crafting/Recipes.h"
@@ -201,6 +202,26 @@ LL_STATIC_HOOK(
     return origin(item);
 }
 
+#if LP_LL_VERSION >= 2660
+// 26.60 has no getBurnDuration(ItemStackBase const&, float): hook the overload that takes the item.
+LL_STATIC_HOOK(
+    BurnDurationHook,
+    ll::memory::HookPriority::Normal,
+    &FurnaceBlockActor::getItemBurnDuration,
+    float,
+    Item const& item,
+    float       burnInterval
+) {
+    auto const& name = item.mFullName->getString();
+    auto const* b    = name.starts_with("lepton:") ? bs::of(name) : nullptr;
+    if (b && hasTag(*b, "lepton:ladder") && moduleEnabled(*b)) {
+        // Quark: fuel.addWood (300 ticks, like planks)
+        static ItemStack planks = game::makeItem("minecraft:oak_planks");
+        if (!planks.isNull()) return origin(*planks.mItem, burnInterval);
+    }
+    return origin(item, burnInterval);
+}
+#else
 LL_STATIC_HOOK(
     BurnDurationHook,
     ll::memory::HookPriority::Normal,
@@ -216,6 +237,7 @@ LL_STATIC_HOOK(
     }
     return origin(item, burnInterval);
 }
+#endif
 
 // ---- lanterns / hanging signs below posts ------------------------------------------------------
 

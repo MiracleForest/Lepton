@@ -34,6 +34,7 @@
 
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/WorldDb.h"
 #include "mod/Config.h"
 #include "mod/Log.h"
@@ -382,7 +383,7 @@ bool destroyBlock(BlockSource& region, BlockPos const& pos, bool drop) {
     auto level = ll::service::getLevel();
     if (!level) return false;
     BlockChangeContext ctx{};
-    return level->destroyBlock(region, pos, drop, ctx);
+    return lp::game::destroyBlock(*level, region, pos, drop, ctx);
 }
 
 namespace {

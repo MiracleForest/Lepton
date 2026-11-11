@@ -41,6 +41,7 @@
 #include "feature/newwoods/Palette.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Items.h"
 #include "mod/Config.h"
 #include "selftest/SelfTest.h"
@@ -568,7 +569,7 @@ LP_REGISTER_SELFTEST("newwoods.fuel_compost", [](Context& ctx) {
     ctx.check(nw::fuelTicks("lepton:azalea_planks") == 300 && nw::fuelTicks("lepton:blossom_log") == 300, "planks / logs 300");
     ctx.check(nw::fuelTicks("lepton:ancient_planks_slab") == 150 && nw::fuelTicks("lepton:azalea_door") == 200, "slab 150, door 200");
     ctx.check(nw::fuelTicks("lepton:red_blossom_sapling") == 100 && nw::fuelTicks("lepton:ancient_leaves") == 0, "sapling 100, leaves none");
-    auto burn = [](char const* id) { return FurnaceBlockActor::getBurnDuration(lp::game::makeItem(id), 200.0f); };
+    auto burn = [](char const* id) { return lp::game::burnDuration(lp::game::makeItem(id), 200.0f); };
     ctx.check(burn("lepton:azalea_planks") > 0 && burn("lepton:azalea_planks") == burn("minecraft:oak_planks"), "furnace burns azalea planks like oak");
     ctx.check(burn("lepton:blue_blossom_sapling") > 0, "furnace burns saplings");
     ctx.check(ComposterBlock::getFillChance(lp::game::makeItem("lepton:ancient_fruit")) == 65, "fruit composts 65%");

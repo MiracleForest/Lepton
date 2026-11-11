@@ -25,21 +25,36 @@ Players on a Lepton server don't need the client mod: the server sends its resou
 
 ## Install
 
-You need Minecraft Bedrock Edition **1.26.51** for Windows (x64) with LeviLamina **26.51.x** (on a client, installed through [LeviLauncher](https://github.com/LiteLDev/LeviLauncher)).
+You need Minecraft Bedrock Edition for Windows (x64) with LeviLamina (on a client, installed through [LeviLauncher](https://github.com/LiteLDev/LeviLauncher)). A Lepton release is built against each LeviLamina line it supports, and you pick the one that matches your game:
 
-With [lip](https://github.com/LiteLDev/lip):
+| Minecraft | LeviLamina | Variant |
+| --- | --- | --- |
+| 1.26.60 | 26.60.x | `26_60`, and the default |
+| 1.26.51 | 26.51.x | `26_51` |
+
+In LeviLauncher, install Lepton from the **LeviMC Mods** page; it offers the variants above, and the default is the newest line.
+
+With [lip](https://github.com/LiteLDev/lip) 0.40.0 or later, on a dedicated server or a client (lip picks the build of the side it installs to):
 
 ```sh
-lip install github.com/MiracleForest/Lepton           # dedicated server
-lip install github.com/MiracleForest/Lepton#client    # client
+lip install github.com/MiracleForest/Lepton          # the newest line (26.60)
+lip install github.com/MiracleForest/Lepton#26_51    # Minecraft 1.26.51
 ```
 
-Or download the zip from the [latest release](https://github.com/MiracleForest/Lepton/releases/latest) and extract it next to `LeviLamina/`:
+`github.com/MiracleForest/Lepton#client`, the variant earlier releases of the client mod were installed as, is the newest line too.
 
-| Where | Zip | Folder |
+lip installs only one variant of Lepton at a time. To switch an installed Lepton to another line, uninstall it first
+(`lip uninstall github.com/MiracleForest/Lepton`, with the variant it was installed as, such as `#client`), then
+install the other variant. Your settings in the `config` folder are kept.
+
+Or download the ZIP for your line and side from the [releases page](https://github.com/MiracleForest/Lepton/releases) (pre-releases such as betas are listed there too, but not under "Latest") and extract it into a `Lepton` folder, so that `Lepton/manifest.json` exists:
+
+| Where | ZIP | Folder |
 | --- | --- | --- |
-| Dedicated server | `lepton-server-windows-x64.zip` | `plugins/Lepton/` |
-| Client (LeviLauncher) | `lepton-client-windows-x64.zip` | `mods/Lepton/` |
+| Dedicated server, 1.26.60 | `lepton-server-win-x64-ll26.60.zip` | `mods/Lepton/` |
+| Client (LeviLauncher), 1.26.60 | `lepton-client-win-x64-ll26.60.zip` | `mods/Lepton/` |
+| Dedicated server, 1.26.51 | `lepton-server-win-x64-ll26.51.zip` | `plugins/Lepton/` |
+| Client (LeviLauncher), 1.26.51 | `lepton-client-win-x64-ll26.51.zip` | `mods/Lepton/` |
 
 ## Commands
 
@@ -75,7 +90,7 @@ Or download the zip from the [latest release](https://github.com/MiracleForest/L
 
 ## Configuration
 
-Settings live in `config/*.json` inside the mod folder (`plugins/Lepton/` or `mods/Lepton/`). Each file is created with defaults on first start, and `/quark reload` applies changes (content and world generation changes apply when a world loads). A unit's file has one `enable<Module>` switch per Quark module plus that module's Quark options, with Quark's names and defaults: [docs/SPEC.md §5](docs/SPEC.md#5-configuration) lists every key.
+Settings live in `config/*.json` inside the mod folder (`mods/Lepton/`, or `plugins/Lepton/` on a 1.26.51 server). Each file is created with defaults on first start, and `/quark reload` applies changes (content and world generation changes apply when a world loads). A unit's file has one `enable<Module>` switch per Quark module plus that module's Quark options, with Quark's names and defaults: [docs/SPEC.md §5](docs/SPEC.md#5-configuration) lists every key.
 
 | File | Contents |
 | --- | --- |

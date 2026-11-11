@@ -100,7 +100,7 @@ the server harness).
 2. `install.ps1` (does nothing if already installed).
 3. Takes a free slot.
 4. Syncs the slot from `bds-base` and wipes its world, logs and configs.
-5. Copies the mod to `plugins\Lepton`. LeviLamina 26.x servers load mods from `plugins\`, not `mods\`.
+5. Copies the mod to the folder the server loads mods from: `plugins\Lepton` on LeviLamina 26.51, `mods\Lepton` on 26.60 (`install.ps1 -Version` picks the line).
 6. Writes `server.properties` for a fresh world `LP-Test`: FLAT, seed 20260521, survival, peaceful, cheats on, `texturepack-required=true`, content log on the console.
 7. Runs `scenarios/<name>.prelaunch.ps1` if it exists.
 8. Boots the server and waits for `Lepton enabled` and `Server started`.

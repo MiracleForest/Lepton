@@ -30,6 +30,7 @@
 #include "feature/logistics/Logistics.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Forms.h"
 #include "game/Inventory.h"
@@ -446,7 +447,7 @@ LP_REGISTER_SELFTEST("logistics.drops_recipes", [](Context& ctx) -> ll::coro::Co
     lp::game::vc::setItems(trough, {lp::game::makeItem("minecraft:wheat", 3)});
     for (int i = 0; i < 5; ++i) {
         BlockChangeContext change{};
-        ctx.player().getLevel().destroyBlock(region, lp::game::blockPos(at(base, i * 3, 1, 0)), true, change);
+        lp::game::destroyBlock(ctx.player().getLevel(), region, lp::game::blockPos(at(base, i * 3, 1, 0)), true, change);
     }
     co_await ctx.ticks(5);
     for (int i = 0; i < 5; ++i)

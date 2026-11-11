@@ -42,6 +42,7 @@
 
 #include "client/Client.h"
 #include "core/Glob.h"
+#include "game/Compat.h"
 #include "mod/Log.h"
 #include "mod/Module.h"
 
@@ -244,12 +245,12 @@ void DrawContext::text(std::string_view s, float x, float y, Color color, float 
     // showColorSymbol = false: the game's font renderer applies `§` codes instead of drawing them.
     TextMeasureData  tmd{scale, 0.f, shadow, false, false, a};
     CaretMeasureData caret{-1, false};
-    mImpl.rc.drawText(mImpl.font.getFont(), area, std::string(s), mce::Color(color.r, color.g, color.b, color.a), color.a, a, tmd, caret);
+    mImpl.rc.drawText(lp::game::fontOf(mImpl.font), area, std::string(s), mce::Color(color.r, color.g, color.b, color.a), color.a, a, tmd, caret);
     mImpl.textQueued = true;
 }
 
 float DrawContext::textWidth(std::string_view s, float scale) const {
-    return static_cast<float>(mImpl.rc.getLineLength(mImpl.font.getFont(), std::string(s), scale, false));
+    return static_cast<float>(mImpl.rc.getLineLength(lp::game::fontOf(mImpl.font), std::string(s), scale, false));
 }
 
 void DrawContext::fill(Rect const& r, Color color) {

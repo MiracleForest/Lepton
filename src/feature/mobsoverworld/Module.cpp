@@ -37,6 +37,7 @@
 #include "feature/mobsoverworld/Features.h"
 #include "feature/mobsoverworld/Messages.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Items.h"
 #include "game/WorldDb.h"
@@ -71,10 +72,10 @@ LL_TYPE_INSTANCE_HOOK(
     Player,
     &Player::interact,
     InteractionResult,
-    Actor&      actor,
-    Vec3 const& location
+    LP_INTERACT_PARAMS
 ) {
-    if (!isServerLevel(*this)) return origin(actor, location);
+    if (!LP_INTERACT_MAINHAND) return origin(LP_INTERACT_ARGS);
+    if (!isServerLevel(*this)) return origin(LP_INTERACT_ARGS);
     auto const& type = actor.getTypeName();
     if (type == kCrab) {
         if (crabs::interact(*this, actor) == Handled::Yes) return success();
@@ -82,13 +83,13 @@ LL_TYPE_INSTANCE_HOOK(
         if (shiba::interact(*this, actor) == Handled::Yes) return success();
         bool wasTame    = actor.isTame();
         bool wasSitting = actor.isSitting();
-        auto result     = origin(actor, location);
+        auto result     = origin(LP_INTERACT_ARGS);
         shiba::afterInteract(*this, actor, wasTame, wasSitting, result.mSuccess);
         return result;
     } else if (type == kToretoise) {
         if (toretoise::interact(*this, actor) == Handled::Yes) return success();
     }
-    return origin(actor, location);
+    return origin(LP_INTERACT_ARGS);
 }
 
 LL_TYPE_INSTANCE_HOOK(
@@ -134,11 +135,26 @@ LL_TYPE_INSTANCE_HOOK(
     }
 }
 
+#if LP_LL_VERSION >= 2660
+// 26.60 passes the education options in.
+LL_STATIC_HOOK(
+    BrewingInitHook,
+    ll::memory::HookPriority::Normal,
+    &PotionBrewing::initPotionBrewing,
+    void,
+    IEducationOptions const& educationOptions
+) {
+    resilience::resetBrewingMixes();
+    origin(educationOptions);
+    resilience::addBrewingMixes();
+}
+#else
 LL_STATIC_HOOK(BrewingInitHook, ll::memory::HookPriority::Normal, &PotionBrewing::initPotionBrewing, void) {
     resilience::resetBrewingMixes();
     origin();
     resilience::addBrewingMixes();
 }
+#endif
 
 LL_TYPE_INSTANCE_HOOK(
     GenerateTradesHook,

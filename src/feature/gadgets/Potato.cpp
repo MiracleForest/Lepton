@@ -49,6 +49,7 @@
 #include "feature/gadgets/Gadgets.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
@@ -415,7 +416,7 @@ void sweepDisplays() {
 /// Wakes the comparators next to `pos` after the potato's items changed.
 void updateComparators(BlockSource& region, GlobalPos const& pos) {
     auto bp = game::blockPos(pos);
-    region.updateNeighborsAt(bp);
+    lp::game::updateNeighborsAt(region, bp);
     // comparators re-read their input in their queued tick (as when a container changes)
     for (auto [dx, dz] : {std::pair{1, 0}, std::pair{-1, 0}, std::pair{0, 1}, std::pair{0, -1}}) {
         for (int dist = 1; dist <= 2; ++dist) { // directly, or through one (solid) block

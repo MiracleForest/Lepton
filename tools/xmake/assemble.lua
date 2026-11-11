@@ -16,10 +16,15 @@
 
 import("core.base.json")
 
-local function mod_version()
-    local tag = try { function () return os.iorun("git describe --tags --abbrev=0 --always") end }
-    local major, minor, patch = (tag or ""):match("v(%d+)%.(%d+)%.(%d+)")
-    return tonumber(major) or 0, tonumber(minor) or 0, tonumber(patch) or 0
+-- The mod version is the "version" of manifest.json (also the version of lip.toml and of the release
+-- tag); packs take its major.minor.patch, without a prerelease suffix such as "-beta.1".
+local function mod_version(projectdir)
+    local text = io.readfile(path.join(projectdir, "manifest.json"))
+    local version = text:match('"version"%s*:%s*"([^"]+)"')
+    if not version then raise("manifest.json has no version") end
+    local major, minor, patch = version:match("^(%d+)%.(%d+)%.(%d+)")
+    if not major then raise("manifest.json version '%s' is not major.minor.patch[-prerelease]", version) end
+    return version, {tonumber(major), tonumber(minor), tonumber(patch)}
 end
 
 local function merge_json_fragments(dir, what)
@@ -190,12 +195,12 @@ function main(target, target_type)
     os.cp(targetfile, path.join(outdir, path.filename(targetfile)))
     local pdb = path.join(path.directory(targetfile), path.basename(targetfile) .. ".pdb")
     if os.isfile(pdb) then os.cp(pdb, path.join(outdir, path.basename(targetfile) .. ".pdb")) end
-    local major, minor, patch = mod_version()
+    local mod_version_str, version = mod_version(projectdir)
     local manifest = io.readfile(path.join(projectdir, "manifest.json"))
     local vars = {
         modName = "Lepton",
         modFile = path.filename(targetfile),
-        modVersion = string.format("%d.%d.%d", major, minor, patch),
+        modVersion = mod_version_str,
         modPlatform = target_type,
     }
     manifest = manifest:gsub("%${(.-)}", function (k) return vars[k] or ("${" .. k .. "}") end)
@@ -203,8 +208,7 @@ function main(target, target_type)
 
     merge_lang(projectdir, path.join(outdir, "lang"))
 
-    local version = {major, minor, patch}
-    if major == 0 and minor == 0 and patch == 0 then version = {0, 0, 1} end -- packs reject 0.0.0
+    if version[1] == 0 and version[2] == 0 and version[3] == 0 then version = {0, 0, 1} end -- packs reject 0.0.0
     local bpsrc = path.join(projectdir, "assets", "pack", "bp")
     local rpsrc = path.join(projectdir, "assets", "pack", "rp")
     local bpdst = path.join(outdir, "behavior_packs", "Lepton_BP")

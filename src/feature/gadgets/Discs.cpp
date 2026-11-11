@@ -23,7 +23,11 @@
 #include "mc/world/level/BlockSource.h"
 #include "mc/world/level/Level.h"
 #include "mc/world/level/Spawner.h"
+#if LP_LL_VERSION >= 2660
+#include "mc/world/item/MusicDiscPlaybackInfo.h"
+#else
 #include "mc/world/item/components/RecordItemComponent.h"
+#endif
 #include "mc/world/level/block/actor/JukeboxBlockActor.h"
 #include "mc/world/level/storage/loot/LootPool.h"
 #include "mc/world/level/storage/loot/LootTable.h"
@@ -191,6 +195,12 @@ void resolvePending() {
     gPending.swap(keep);
 }
 
+#if LP_LL_VERSION >= 2660
+using RecordPlayback = MusicDiscPlaybackInfo; // 26.60 passes what to play instead of the record component
+#else
+using RecordPlayback = RecordItemComponent;
+#endif
+
 // The discs declare the vanilla record.13 sound event (the only kind a record item accepts): the
 // jukebox's own playback is skipped for them and Lepton plays the real sound.
 LL_TYPE_INSTANCE_HOOK(
@@ -199,8 +209,8 @@ LL_TYPE_INSTANCE_HOOK(
     JukeboxBlockActor,
     &JukeboxBlockActor::_startRecordSound,
     void,
-    BlockSource&               region,
-    RecordItemComponent const& record
+    BlockSource&          region,
+    RecordPlayback const& record
 ) {
     auto id = game::itemId(*mRecord);
     if (id.starts_with("lepton:music_disc_")) {

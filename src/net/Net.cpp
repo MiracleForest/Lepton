@@ -73,6 +73,12 @@ constexpr uint64_t kMaxText = 4u << 20; ///< 4 MiB per field
 template <class Derived>
 class MessagePacket : public ll::network::PacketBase<Derived> {
 public:
+#if LP_LL_VERSION >= 2660
+    // LeviLamina 26.60 disconnects a peer that lacks a required packet. Lepton works with vanilla
+    // clients and servers, which never get its packets (see Net.h), so they are optional.
+    static constexpr bool Optional{true};
+#endif
+
     std::string id;
     std::string payload;
 
@@ -216,7 +222,11 @@ namespace wire {
 
 class LeptonToServerHandler : public ll::network::PacketHandlerBase<LeptonToServerHandler, LeptonToServerPacket> {
 public:
+#if LP_LL_VERSION >= 2660
+    void handlePacket(NetworkIdentifier const& source, NetEventCallback&, ll::network::PacketSide, LeptonToServerPacket const& packet) const {
+#else
     void handlePacket(NetworkIdentifier const& source, NetEventCallback&, LeptonToServerPacket const& packet) const {
+#endif
         auto* player = playerByNetworkId(source);
         if (!player) {
             log().debug("net: {} from an unknown connection", packet.id);
@@ -233,7 +243,11 @@ public:
 
 class LeptonToClientHandler : public ll::network::PacketHandlerBase<LeptonToClientHandler, LeptonToClientPacket> {
 public:
+#if LP_LL_VERSION >= 2660
+    void handlePacket(NetworkIdentifier const&, NetEventCallback&, ll::network::PacketSide, LeptonToClientPacket const& packet) const {
+#else
     void handlePacket(NetworkIdentifier const&, NetEventCallback&, LeptonToClientPacket const& packet) const {
+#endif
 #ifdef LP_CLIENT
         dispatchClient(packet.id, packet.payload);
 #else

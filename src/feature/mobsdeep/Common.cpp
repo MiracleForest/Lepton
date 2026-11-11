@@ -173,7 +173,13 @@ std::optional<std::pair<int, int>> findFortress(int dim, Vec3 const& origin) {
     BlockPos from = game::blockPosOf(origin);
     for (char const* name : {"minecraft:fortress", "fortress"}) {
         BlockPos found{};
-        if (gen->findNearestStructureFeature(HashedString(name), from, found, false, std::nullopt)) {
+#if LP_LL_VERSION >= 2660
+        // 26.60 takes the search radius; Quark searches 100 chunks (checked below as well).
+        bool located = gen->findNearestStructureFeature(HashedString(name), from, found, false, std::nullopt, 100);
+#else
+        bool located = gen->findNearestStructureFeature(HashedString(name), from, found, false, std::nullopt);
+#endif
+        if (located) {
             double dx = found.x - from.x, dz = found.z - from.z;
             if (dx * dx + dz * dz > 1600.0 * 1600.0) return std::nullopt; // Quark: 100 chunks
             return std::pair{found.x, found.z};

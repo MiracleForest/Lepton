@@ -27,6 +27,7 @@
 
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Forms.h"
 #include "game/Items.h"
 #include "game/Shapes.h"
@@ -166,7 +167,7 @@ VariantMap& built() {
         m.manual.emplace(s.substr(a + 1, b - a - 1), std::make_pair(s.substr(0, a), s.substr(b + 1)));
     }
     std::vector<std::string> all;
-    BlockTypeRegistry::get().forEachBlockType([&](BlockType const& t) {
+    lp::game::forEachBlockType([&](BlockType const& t) {
         all.push_back(t.getTypeName());
         return true;
     });

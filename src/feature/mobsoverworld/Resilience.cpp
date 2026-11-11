@@ -113,8 +113,9 @@ void setModifier(Actor& actor, int amplifier, bool on) {
     if (!inst) return;
     inst->removeModifier(kModifierId, attr.mContext);
     if (on) {
-        AttributeModifier mod(kModifierId, "lepton:resilience", 0.5f * static_cast<float>(amplifier + 1),
-                              AttributeModifierOperation::OperationAddition, AttributeOperands::OperandCurrent, false);
+        auto mod = std::make_shared<AttributeModifier>(kModifierId, "lepton:resilience", 0.5f * static_cast<float>(amplifier + 1),
+                                                       AttributeModifierOperation::OperationAddition,
+                                                       AttributeOperands::OperandCurrent, false);
         inst->addModifier(mod, attr.mContext);
     }
     if (on) gApplied[game::entities::idOf(actor)] = actor.getRuntimeID().rawID;

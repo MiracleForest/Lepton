@@ -30,6 +30,7 @@
 
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Items.h"
 #include "mod/Log.h"
@@ -175,8 +176,8 @@ bool place(BlockSource& region, BlockPos const& pos, Block const& block, int fac
         BlockChangeContext ctx{};
         if (!region.setBlock(pos, *b, 2, nullptr, ctx)) return false;
         region.setBlock(offset(pos, 1), *upper, 2, nullptr, ctx);
-        region.updateNeighborsAt(pos);
-        region.updateNeighborsAt(offset(pos, 1));
+        lp::game::updateNeighborsAt(region, pos);
+        lp::game::updateNeighborsAt(region, offset(pos, 1));
     } else if (!game::setBlock(region, pos, *b)) return false;
     placeSound(region, pos, *b);
     return true;

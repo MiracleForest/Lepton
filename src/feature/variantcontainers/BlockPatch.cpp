@@ -32,6 +32,7 @@
 #include "mc/world/level/block/registry/BlockTypeRegistry.h"
 
 #include "feature/variantcontainers/VariantContainers.h"
+#include "game/Compat.h"
 #include "game/WorldDb.h"
 #include "mod/Log.h"
 #include "mod/Module.h"
@@ -205,7 +206,7 @@ void patchBlockTypes() {
         return;
     }
     for (auto const& id : furnaceIds()) patchById(id);
-    BlockTypeRegistry::get().forEachBlockType([](BlockType const& t) {
+    lp::game::forEachBlockType([](BlockType const& t) {
         patchType(const_cast<BlockType&>(t), t.getTypeName());
         return true;
     });
@@ -234,7 +235,7 @@ public:
             mHooked = false;
         }
         std::lock_guard lock(mutex());
-        BlockTypeRegistry::get().forEachBlockType([](BlockType const& t) {
+        lp::game::forEachBlockType([](BlockType const& t) {
             auto it = clones().find(vtableOf(t));
             if (it != clones().end()) *reinterpret_cast<void***>(const_cast<BlockType*>(&t)) = it->second.original;
             return true;

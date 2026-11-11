@@ -41,6 +41,7 @@
 #include "feature/misctweaks/Villagers.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Items.h"
 #include "game/WorldDb.h"
@@ -269,12 +270,20 @@ LP_REGISTER_SELFTEST("misctweaks.armor_stand_shield", [](Context& ctx) -> ll::co
     auto* stand = static_cast<ArmorStand*>(ent::find(id));
     ctx.require(stand != nullptr, "armor stand loaded");
     p.setCarriedItem(makeItem("minecraft:shield"));
+#if LP_LL_VERSION >= 2660
+    (void)lp::game::interact(p, *stand, stand->getPosition());
+#else
     stand->_trySwapItem(p, SharedTypes::Legacy::EquipmentSlot::Mainhand);
+#endif
     ctx.check(lp::game::itemId(stand->getOffhandSlot()) == "minecraft:shield", "the shield goes to the off hand");
     ctx.check(lp::game::isEmpty(stand->getCarriedItem()), "the main hand stays empty");
 
     p.setCarriedItem(makeItem("minecraft:iron_sword"));
+#if LP_LL_VERSION >= 2660
+    (void)lp::game::interact(p, *stand, stand->getPosition());
+#else
     stand->_trySwapItem(p, SharedTypes::Legacy::EquipmentSlot::Mainhand);
+#endif
     ctx.check(lp::game::itemId(stand->getCarriedItem()) == "minecraft:iron_sword", "other items go to the main hand");
     ctx.check(lp::game::itemId(stand->getOffhandSlot()) == "minecraft:shield", "the shield stays in the off hand");
     p.setCarriedItem(ItemStack::EMPTY_ITEM());
@@ -426,6 +435,7 @@ LP_REGISTER_SELFTEST("misctweaks.griefing", [](Context& ctx) -> ll::coro::CoroTa
     ctx.check(mt::isNonGriefing("enderman") && !mt::isNonGriefing("minecraft:zombie"), "list lookup");
 });
 
+#if LP_LL_VERSION < 2660 // the mushroom nerf needs HugeMushroomFeature::placeFixed
 LP_REGISTER_SELFTEST("misctweaks.mushroom", [](Context& ctx) -> ll::coro::CoroTask<> {
     ConfigScope cfg;
     auto        pos = ctx.testPos(2735);
@@ -468,6 +478,7 @@ LP_REGISTER_SELFTEST("misctweaks.mushroom", [](Context& ctx) -> ll::coro::CoroTa
     ctx.info("obstructed growth: vanilla " + std::to_string(vanilla) + ", nerfed " + std::to_string(nerfed)
              + " (-1 = did not grow, else glass left of 20)");
 });
+#endif
 LP_REGISTER_SELFTEST("misctweaks.village_nerf", [](Context& ctx) {
     int suppressed = 0;
     for (int i = 0; i < 1000; ++i) suppressed += mt::villageSuppressed(i * 16, 0, 0, 0, 1000000) ? 1 : 0;

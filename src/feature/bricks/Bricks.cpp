@@ -51,6 +51,7 @@
 #include "mc/world/phys/AABB.h"
 
 #include "game/BlockStates.h"
+#include "game/Compat.h"
 #include "game/Items.h"
 #include "game/WorldDb.h"
 #include "mod/Config.h"
@@ -294,7 +295,7 @@ LL_TYPE_INSTANCE_HOOK(SoulSpeedHook, ll::memory::HookPriority::Normal, Mob, &Mob
     if (current) inst->removeModifier(kSoulSpeedId, attr.mContext);
     // not serializable: never saved with the entity, so a restart cannot leave it behind
     inst->addModifier(
-        AttributeModifier(
+        std::make_shared<AttributeModifier>(
             kSoulSpeedId,
             kSoulSpeedModifier,
             bonus,
@@ -325,7 +326,7 @@ thread_local std::optional<bool> gHarvestVerdict;
 
 bool canHarvest(Player& player, ItemTag const& tag) {
     auto const& held = player.getSelectedItem();
-    return !held.isNull() && held.hasTag(tag);
+    return !held.isNull() && lp::game::hasItemTag(held, tag);
 }
 
 LL_TYPE_INSTANCE_HOOK(

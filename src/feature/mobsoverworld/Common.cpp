@@ -37,6 +37,7 @@
 #include "mc/world/level/GameType.h"
 
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
 
@@ -216,7 +217,7 @@ void pushUp(Actor& actor, float dy) {
 
 bool itemHasTag(ItemStack const& stack, std::string_view tag) {
     if (stack.isNull()) return false;
-    return stack.hasTag(ItemTag{HashedString(tag)});
+    return lp::game::hasItemTag(stack, ItemTag{HashedString(tag)});
 }
 
 bool isWaterBucket(ItemStack const& stack) { return game::itemId(stack) == "minecraft:water_bucket"; }

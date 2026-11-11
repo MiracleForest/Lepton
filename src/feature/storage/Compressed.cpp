@@ -67,6 +67,8 @@ LL_TYPE_STATIC_HOOK(
     return origin(item, burnInterval);
 }
 
+#if LP_LL_VERSION < 2660
+// 26.60 has no getBurnDuration(ItemStackBase const&, float): StorageItemBurnHook alone covers it.
 LL_TYPE_STATIC_HOOK(
     StorageBurnHook,
     ll::memory::HookPriority::Normal,
@@ -82,6 +84,7 @@ LL_TYPE_STATIC_HOOK(
     }
     return origin(stack, burnInterval);
 }
+#endif
 LL_TYPE_STATIC_HOOK(
     StorageFuelSlotHook,
     ll::memory::HookPriority::Normal,
@@ -401,7 +404,9 @@ void applyDragonBreath() {
 
 void installCompressed() {
     StorageItemBurnHook::hook();
+#if LP_LL_VERSION < 2660
     StorageBurnHook::hook();
+#endif
     StorageFuelSlotHook::hook();
     StorageFurnaceTickHook::hook();
     StorageFurnaceXpHook::hook();
@@ -412,7 +417,9 @@ void installCompressed() {
 
 void uninstallCompressed() {
     StorageItemBurnHook::unhook();
+#if LP_LL_VERSION < 2660
     StorageBurnHook::unhook();
+#endif
     StorageFuelSlotHook::unhook();
     StorageFurnaceTickHook::unhook();
     StorageFurnaceXpHook::unhook();
