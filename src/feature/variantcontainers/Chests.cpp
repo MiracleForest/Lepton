@@ -37,6 +37,7 @@
 #include "feature/variantcontainers/ItemsContainer.h"
 #include "feature/variantcontainers/VariantContainers.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Items.h"
 #include "game/VirtualContainer.h"
@@ -537,8 +538,8 @@ int chestComparatorSignal(BlockSource& region, BlockPos const& pos) {
 }
 
 void notifyChestChanged(BlockSource& region, BlockPos const& pos) {
-    region.updateNeighborsAt(pos);
-    if (auto q = partnerOf(region, pos)) region.updateNeighborsAt(*q);
+    lp::game::updateNeighborsAt(region, pos);
+    if (auto q = partnerOf(region, pos)) lp::game::updateNeighborsAt(region, *q);
 }
 
 int chestViewers(BlockSource& region, BlockPos const& pos) {

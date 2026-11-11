@@ -57,6 +57,7 @@
 #include "client/ui/Ui.h"
 #include "feature/hud/HudConfig.h"
 #include "feature/hud/Logic.h"
+#include "game/Compat.h"
 #include "game/Items.h"
 #include "mod/Config.h"
 #include "mod/Log.h"
@@ -127,7 +128,7 @@ Font* font() {
     auto* c = client::currentClient();
     if (!c) return nullptr;
     try {
-        return &c->getFontHandle().getFont();
+        return &lp::game::fontOf(c->getFontHandle());
     } catch (...) {
         return nullptr;
     }

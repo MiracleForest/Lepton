@@ -24,6 +24,7 @@
 
 #include "feature/backpack/Messages.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
@@ -202,7 +203,7 @@ LP_REGISTER_SELFTEST("backpack.armor_stand", [](Context& ctx) -> ll::coro::CoroT
     ctx.require(stand != nullptr, "armor stand spawned");
     auto standId = lp::game::entities::idOf(*stand);
     p.setArmor(ArmorSlot::Torso, fullBackpack());
-    (void)p.interact(*stand, stand->getPosition());
+    (void)lp::game::interact(p, *stand, stand->getPosition());
     co_await ctx.ticks(1);
     stand = lp::game::entities::find(standId);
     ctx.require(stand != nullptr, "armor stand still there");
@@ -210,7 +211,7 @@ LP_REGISTER_SELFTEST("backpack.armor_stand", [](Context& ctx) -> ll::coro::CoroT
     ctx.check(lp::game::isEmpty(p.getArmor(ArmorSlot::Torso)), "the player's chest slot is empty");
     co_await ctx.ticks(3);
     ctx.check(lp::game::isEmpty(p.getArmor(ArmorSlot::Torso)), "and stays empty (no lock)");
-    (void)p.interact(*stand, stand->getPosition());
+    (void)lp::game::interact(p, *stand, stand->getPosition());
     co_await ctx.ticks(1);
     ctx.check(bp::backpackHasItems(p.getArmor(ArmorSlot::Torso)), "using it again takes the backpack back");
     lp::game::entities::despawn(*stand);

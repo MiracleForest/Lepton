@@ -23,6 +23,7 @@
 #include "feature/inventory/Search.h"
 #include "feature/inventory/Server.h"
 #include "feature/inventory/Sorting.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
@@ -275,7 +276,7 @@ LP_REGISTER_SELFTEST("inventory.armorswap", [](Context& ctx) -> ll::coro::CoroTa
     p.setArmor(AS::Legs, enchanted("minecraft:iron_leggings", Enchant::Type::CurseOfBinding, 1));
     p.setOffhandSlot(makeItem("minecraft:shield"));
     p.simulateSneaking();
-    auto result = p.interact(*stand, stand->getPosition());
+    auto result = lp::game::interact(p, *stand, stand->getPosition());
     ctx.check(result.mSuccess, "sneak-using the stand is handled");
     ctx.check(itemId(p.getArmor(AS::Head)) == "minecraft:diamond_helmet", "the stand's helmet goes to the player");
     ctx.check(itemId(stand->getArmor(AS::Feet)) == "minecraft:iron_boots", "the player's boots go to the stand");

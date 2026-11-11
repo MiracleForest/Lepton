@@ -22,6 +22,7 @@
 
 #include "feature/worldbeyond/Blocks.h"
 #include "feature/worldbeyond/Chorus.h"
+#include "game/Compat.h"
 
 namespace lp::feature::worldbeyond {
 
@@ -164,7 +165,7 @@ bool placeSpikeAt(GenRegion& region, BlockPos const& pos, JavaRandom& rand, Worl
             for (int k = 0; k < heightBottom + heightBelow; ++k) {
                 BlockPos p{pos.x + i - 1, pos.y + k - heightBelow, pos.z + j - 1};
                 Block const& old = region.get(p); // Java: everything but unbreakable blocks (destroy speed -1)
-                if (old.isAir() || old.getBlockType().getDestroySpeed() >= 0.0f) region.set(p, obsidian);
+                if (old.isAir() || lp::game::hardness(old) >= 0.0f) region.set(p, obsidian);
             }
 
     for (int i = 0; i < heightMiddle; ++i) {

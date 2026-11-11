@@ -20,6 +20,7 @@
 
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "mod/Log.h"
 #include "mod/Module.h"
 #include "net/Net.h"
@@ -172,7 +173,7 @@ LL_TYPE_INSTANCE_HOOK(
             auto const& cur = r->getBlock(pos);
             if (cur.getTypeName() != "minecraft:ladder" || ladderSurvives(*r, pos, ladderFacing(cur))) return;
             BlockChangeContext ctx{};
-            r->getLevel().destroyBlock(*r, pos, true, ctx);
+            lp::game::destroyBlock(r->getLevel(), *r, pos, true, ctx);
         });
         return;
     }

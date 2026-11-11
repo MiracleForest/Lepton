@@ -41,6 +41,7 @@
 #include "feature/storage/Storage.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
@@ -152,7 +153,7 @@ bool immovable(Block const& b) {
     };
     for (auto x : kNo)
         if (x == n) return true;
-    return b.getBlockType().getDestroySpeed() < 0.f; // unbreakable (bedrock, barrier, command blocks, ...)
+    return lp::game::hardness(b) < 0.f; // unbreakable (bedrock, barrier, command blocks, ...)
 }
 
 /// Quark RopeBlock#moveBlock.
@@ -471,7 +472,7 @@ void checkSurvival(BlockSource& region, BlockPos const& pos) {
     if (!isRope(b) || canHang(region, pos)) return;
     // Quark: destroy particles, drop the rope, air
     BlockChangeContext ctx{};
-    region.getLevel().destroyBlock(region, pos, true, ctx);
+    lp::game::destroyBlock(region.getLevel(), region, pos, true, ctx);
 }
 
 void install() {

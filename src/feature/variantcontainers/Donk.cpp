@@ -26,6 +26,7 @@
 #include "feature/variantcontainers/VariantContainers.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
@@ -62,7 +63,8 @@ std::vector<Death>& deaths() {
 }
 uint64_t gTick = 0;
 
-LL_TYPE_INSTANCE_HOOK(DonkInteractHook, ll::memory::HookPriority::Normal, Player, &Player::interact, InteractionResult, Actor& actor, Vec3 const& location) {
+LL_TYPE_INSTANCE_HOOK(DonkInteractHook, ll::memory::HookPriority::Normal, Player, &Player::interact, InteractionResult, LP_INTERACT_PARAMS) {
+    if (!LP_INTERACT_MAINHAND) return origin(LP_INTERACT_ARGS);
     if (!isClientSide() && cfg().enableVariantChests && isChestedHorse(actor) && !isSneaking()) {
         ItemStack const& held = getSelectedItem();
         if (isWoodenVariantChest(held) && !actor.getStatusFlag(ActorFlags::Chested) && actor.getStatusFlag(ActorFlags::Tamed)
@@ -87,7 +89,7 @@ LL_TYPE_INSTANCE_HOOK(DonkInteractHook, ll::memory::HookPriority::Normal, Player
             }
         }
     }
-    return origin(actor, location);
+    return origin(LP_INTERACT_ARGS);
 }
 
 /// The chest item a dead animal drops becomes its remembered variant chest.

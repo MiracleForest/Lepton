@@ -35,6 +35,7 @@
 #include "feature/newwoods/Runtime.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Items.h"
 #include "mod/Log.h"
 
@@ -170,7 +171,7 @@ void leafTick(BlockSource& region, BlockPos const& pos) {
     if (!isOurLeaves(b) || persistent(b)) return;
     if (leafSupported(region, pos)) return;
     BlockChangeContext ctx{};
-    region.getLevel().destroyBlock(region, pos, true, ctx);
+    lp::game::destroyBlock(region.getLevel(), region, pos, true, ctx);
 }
 
 // ---- falling leaves (Java BlossomLeavesBlock#animateTick) ----------------------------------------

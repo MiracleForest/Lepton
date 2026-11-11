@@ -3,6 +3,9 @@
 #   pwsh tools/build.ps1                    # both platforms, release
 #   pwsh tools/build.ps1 -Target server     # one platform
 #   pwsh tools/build.ps1 -Tests             # also build and run the unit tests (lp-tests)
+#   pwsh tools/build.ps1 -LeviLamina 26.51.7  # another supported LeviLamina line (default 26.60.6)
+#
+# The lock file of the line (locks/<major>_<minor>.lock) is copied over xmake-requires.lock first.
 #
 # Each platform has its own build dir (build/<target>); outputs land in
 #   bin/<target>/Lepton/  (dll, pdb, manifest.json, lang/, behavior_packs/, resource_packs/)
@@ -14,6 +17,7 @@
 param(
     [ValidateSet('server', 'client', 'all')][string]$Target = 'all',
     [ValidateSet('release', 'debug')][string]$Mode = 'release',
+    [string]$LeviLamina = '26.60.6',
     [switch]$Tests,
     [int]$Jobs = $(if ($env:LP_BUILD_JOBS) { [int]$env:LP_BUILD_JOBS } else { [Math]::Max(2, [int]([Environment]::ProcessorCount / 2)) })
 )
@@ -66,10 +70,16 @@ try {
         if ($pf -and (Test-Path (Join-Path $pf 'Microsoft Visual Studio\18'))) { $vsArgs = @('--vs=2026'); break }
     }
 
+    if ($LeviLamina -notmatch '^(\d+)\.(\d+)\.\d+$') { throw "-LeviLamina must be major.minor.patch, got $LeviLamina" }
+    $lock = Join-Path $root "locks/$($Matches[1])_$($Matches[2]).lock"
+    if (-not (Test-Path $lock)) { throw "LeviLamina $LeviLamina is not a supported line: $lock is missing" }
+    Copy-Item $lock (Join-Path $root 'xmake-requires.lock')
+    Write-Host "==> LeviLamina $LeviLamina ($lock)"
+
     $targets = if ($Target -eq 'all') { @('server', 'client') } else { @($Target) }
     foreach ($t in $targets) {
         Write-Host "==> configuring $t ($Mode)"
-        xmake f -P $root -a x64 -m $Mode -p windows --target_type=$t -o "build/$t" @vsArgs -y
+        xmake f -P $root -a x64 -m $Mode -p windows --target_type=$t --levilamina=$LeviLamina -o "build/$t" @vsArgs -y
         if ($LASTEXITCODE) { throw "xmake config failed for $t" }
         Write-Host "==> building $t"
         xmake build -P $root -y -j $Jobs Lepton

@@ -37,6 +37,7 @@
 #include "feature/logistics/Logistics.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Items.h"
 #include "game/VirtualContainer.h"
@@ -114,7 +115,7 @@ bool isFood(Actor& a, ItemStack const& stack) {
     auto* b = breedable(a);
     if (!b || !b->mStaticData) return false;
     for (auto const& item : b->mStaticData->mBreedItems.get())
-        if (item.mItemDescriptor->sameItem(stack, false)) return true;
+        if (lp::game::descriptorMatches(*item.mItemDescriptor, stack)) return true;
     return false;
 }
 

@@ -22,6 +22,7 @@
 #include "mc/world/level/block/actor/FurnaceBlockActor.h"
 
 #include "feature/hud/HudConfig.h"
+#include "game/Compat.h"
 #include "game/Items.h"
 
 namespace lp::feature::hud {
@@ -251,7 +252,7 @@ FoodRow foodRow(int nutrition, int divisor, int compressionThreshold) {
 
 int fuelTicks(ItemStackBase const& stack) {
     if (game::isEmpty(stack)) return 0;
-    return static_cast<int>(std::lround(FurnaceBlockActor::getBurnDuration(stack, 200.f)));
+    return static_cast<int>(std::lround(lp::game::burnDuration(stack, 200.f)));
 }
 
 std::string fuelText(int ticks, int divisor) {

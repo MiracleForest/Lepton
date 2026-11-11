@@ -37,6 +37,7 @@
 #include "feature/frames/SignAttachment.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Items.h"
 #include "game/WorldDb.h"
@@ -499,8 +500,8 @@ void onTick(ll::event::ServerLevelTickEvent&) {
             BlockPos pos = game::blockPos(gp);
             if (!region->hasChunksAt(pos, 1, false)) continue;
             auto const& block = region->getBlock(pos);
-            region->updateNeighborsAt(pos);
-            if (isGlassBlock(block)) region->updateNeighborsAt(offset(pos, oppositeDir(dirOf(block))));
+            lp::game::updateNeighborsAt(*region, pos);
+            if (isGlassBlock(block)) lp::game::updateNeighborsAt(*region, offset(pos, oppositeDir(dirOf(block))));
         }
     }
 

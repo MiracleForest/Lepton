@@ -24,7 +24,9 @@
 #include "mc/world/Container.h"
 #include "mc/world/actor/Actor.h"
 #include "mc/world/actor/player/Player.h"
+#if LP_LL_VERSION < 2660
 #include "mc/world/containers/managers/models/ChestContainerManagerModel.h"
+#endif
 #include "mc/world/containers/managers/models/ContainerManagerModel.h"
 #include "mc/network/MinecraftPacketIds.h"
 #include "mc/network/MinecraftPackets.h"
@@ -335,6 +337,7 @@ std::vector<BlockPos> fakeBlockPositions(Spec const& spec, GlobalPos const& pos)
     return {at, BlockPos{at.x + 1, at.y, at.z}};
 }
 
+#if LP_LL_VERSION < 2660
 void sendBlock(Player& player, BlockPos const& at, Block const& block, CompoundTag tag) {
     if (auto pkt = MinecraftPackets::createPacket(MinecraftPacketIds::UpdateBlock)) {
         auto& upd        = static_cast<UpdateBlockPacket&>(*pkt);
@@ -397,6 +400,7 @@ void showFakeBlockScreen(ServerPlayer& player, Actor& helper, Spec const& spec, 
     open.mEntityUniqueID = ActorUniqueID{-1}; // a block screen for the client
     open.sendTo(player);
 }
+#endif
 
 /// Sends the open screen's contents (the client shows an empty window otherwise: the contents of
 /// an entity container only reach it with changes).
@@ -411,8 +415,21 @@ void showScreen(Player& player, Actor& helper, Spec const& spec, GlobalPos const
     if (!comp) return;
     auto title = trFor(player, spec.titleKey, spec.titleFallback);
     comp->setCustomName(title);
+#if LP_LL_VERSION >= 2660
+    // 26.60 offers no constructor of the chest model that the client-only block screens need:
+    // there the helper's own screen opens instead.
+    if (fakeBlockScreen(spec)) {
+        static bool warned = false;
+        if (!warned) {
+            warned = true;
+            log().warn("virtual containers: 3x3 and double chest screens open as chest screens on this game version");
+        }
+    }
+    helper.openContainerComponent(player);
+#else
     if (fakeBlockScreen(spec)) showFakeBlockScreen(static_cast<ServerPlayer&>(player), helper, spec, pos, title);
     else helper.openContainerComponent(player);
+#endif
     log().info("virtual container {} opened by {}", pos.key(), player.getRealName());
     // Contents now and again once the client surely shows the screen.
     int64_t entity = entities::idOf(helper);

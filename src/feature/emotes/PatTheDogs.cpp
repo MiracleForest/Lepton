@@ -36,6 +36,7 @@
 #include "mc/world/level/dimension/Dimension.h"
 
 #include "feature/emotes/EmotesConfig.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/WorldDb.h"
 #include "mod/Config.h"
@@ -221,7 +222,8 @@ PetResult tryPet(Player& player, Actor& target) {
 
 namespace {
 
-LL_TYPE_INSTANCE_HOOK(PetHook, ll::memory::HookPriority::Normal, Player, &Player::interact, InteractionResult, Actor& actor, Vec3 const& location) {
+LL_TYPE_INSTANCE_HOOK(PetHook, ll::memory::HookPriority::Normal, Player, &Player::interact, InteractionResult, LP_INTERACT_PARAMS) {
+    if (!LP_INTERACT_MAINHAND) return origin(LP_INTERACT_ARGS);
     if (!isClientSide()) {
         auto r = tryPet(*this, actor);
         if (r != PetResult::None) {
@@ -231,7 +233,7 @@ LL_TYPE_INSTANCE_HOOK(PetHook, ll::memory::HookPriority::Normal, Player, &Player
             return res;
         }
     }
-    return origin(actor, location);
+    return origin(LP_INTERACT_ARGS);
 }
 
 // ---- dogs want love (Quark's WantLoveGoal + NuzzleGoal) -------------------------------------------

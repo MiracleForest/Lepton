@@ -33,6 +33,7 @@
 #include "feature/emotes/EmoteScript.h"
 #include "feature/emotes/Emotes.h"
 #include "feature/emotes/EmotesConfig.h"
+#include "game/Compat.h"
 #include "mod/Config.h"
 #include "mod/Log.h"
 #include "mod/Main.h"
@@ -344,7 +345,7 @@ bool interrupted(Level& level, std::int64_t player) {
     auto* actor = level.fetchEntity(uid, false);
     if (!actor || !actor->isPlayer()) return false;
     auto& mob = static_cast<Mob&>(*actor);
-    if (static_cast<float>(mob.mAttackAnim) > 0.f || static_cast<bool>(mob.mSwinging)) return true;
+    if (static_cast<float>(mob.mAttackAnim) > 0.f || lp::game::isSwinging(mob)) return true;
     auto hurt = actor->getEntityContext().tryGetComponent<MobHurtTimeComponent>();
     return hurt && static_cast<int>(hurt->mValue) > 0;
 }

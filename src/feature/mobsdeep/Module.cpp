@@ -71,6 +71,7 @@
 
 #include "feature/mobsdeep/Mobsdeep.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
@@ -774,8 +775,9 @@ void MobsdeepModule::tickHats(std::vector<Player*> const& players) {
             if (*m.mId == kLuckId) has = true;
         if (wearing == has) continue;
         if (wearing)
-            inst->addModifier(AttributeModifier(kLuckId, "lepton:forgotten_hat_luck", 1.0f, AttributeModifierOperation::OperationAddition,
-                                                AttributeOperands::OperandCurrent, false),
+            inst->addModifier(std::make_shared<AttributeModifier>(kLuckId, "lepton:forgotten_hat_luck", 1.0f,
+                                                                  AttributeModifierOperation::OperationAddition,
+                                                                  AttributeOperands::OperandCurrent, false),
                               attr.mContext);
         else
             inst->removeModifier(kLuckId, attr.mContext);
@@ -1062,12 +1064,12 @@ LL_TYPE_INSTANCE_HOOK(
     Player,
     &Player::interact,
     InteractionResult,
-    Actor&      actor,
-    Vec3 const& location
+    LP_INTERACT_PARAMS
 ) {
-    if (isClientSide()) return origin(actor, location);
+    if (!LP_INTERACT_MAINHAND) return origin(LP_INTERACT_ARGS);
+    if (isClientSide()) return origin(LP_INTERACT_ARGS);
     if (auto r = M().preInteract(*this, actor)) return *r;
-    auto r = origin(actor, location);
+    auto r = origin(LP_INTERACT_ARGS);
     M().postInteract(*this, actor, r);
     return r;
 }

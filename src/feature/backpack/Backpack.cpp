@@ -51,6 +51,7 @@
 #include "mc/world/level/Spawner.h"
 
 #include "feature/backpack/Messages.h"
+#include "game/Compat.h"
 #include "game/Entities.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
@@ -533,9 +534,9 @@ LL_TYPE_INSTANCE_HOOK(
     Player,
     &Player::interact,
     InteractionResult,
-    Actor&      actor,
-    Vec3 const& location
+    LP_INTERACT_PARAMS
 ) {
+    if (!LP_INTERACT_MAINHAND) return origin(LP_INTERACT_ARGS);
     if (!isClientSide() && cfg().enableBackpack && cfg().allowArmorStandUnloading
         && game::entities::typeOf(actor) == "minecraft:armor_stand" && !isSneaking()
         && game::isEmpty(getSelectedItem()) && game::isEmpty(getOffhandSlot())) {
@@ -553,7 +554,7 @@ LL_TYPE_INSTANCE_HOOK(
             return r;
         }
     }
-    return origin(actor, location);
+    return origin(LP_INTERACT_ARGS);
 }
 
 bool recipeDisabled(std::string const& id) {

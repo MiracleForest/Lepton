@@ -32,6 +32,7 @@
 #include "core/GlobalPos.h"
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "mod/Log.h"
 
 namespace lp::feature::redstone {
@@ -161,7 +162,7 @@ struct Resolver {
                 if (mt != MovementType::Immovable) usedLepton = true;
                 return false;
             }
-            if (mt == MovementType::Immovable && b.getBlockType().getDestroySpeed() >= 0.0f && javaMovable(name)) {
+            if (mt == MovementType::Immovable && lp::game::hardness(b) >= 0.0f && javaMovable(name)) {
                 mt         = MovementType::PushPull;
                 usedLepton = true;
             }
@@ -408,7 +409,7 @@ void scheduleDelayedUpdates(BlockSource& region, std::vector<BlockPos> const& mo
         due = now() + 4;
         later(4, [dim, dest, key] {
             delayed().erase(key);
-            if (auto* reg = game::regionOf(dim); reg && reg->hasChunksAt(dest, 0, false)) reg->updateNeighborsAt(dest);
+            if (auto* reg = game::regionOf(dim); reg && reg->hasChunksAt(dest, 0, false)) lp::game::updateNeighborsAt(*reg, dest);
         });
     }
 }

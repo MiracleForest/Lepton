@@ -1,9 +1,23 @@
 # AGENTS.md
 
 Lepton is a Bedrock port of the *behaviour* of the Java mod **Quark 4.1-488** (Vazkii),
-written as a LeviLamina native mod. It targets MC **1.26.51** / LeviLamina **26.51.7**, builds with
-xmake + clang-cl on Windows x64, and runs on **both** the dedicated server (BDS) and the client
-(local worlds through LeviLauncher). One code base, two builds (`--target_type=server|client`).
+written as a LeviLamina native mod. It builds with xmake + clang-cl on Windows x64, and runs on
+**both** the dedicated server (BDS) and the client (local worlds through LeviLauncher). One code
+base, two builds (`--target_type=server|client`) per supported LeviLamina line.
+
+One source tree supports several LeviLamina lines, one build each. A line is a lip variant of the
+same name (see `lip.toml`), and `--levilamina` (`tools/build.ps1 -LeviLamina`) picks the one being built:
+
+| Line | Minecraft | Variant | Built against | Lock file | Server mods folder |
+| --- | --- | --- | --- | --- | --- |
+| 26.60.x | 1.26.60 | `26_60`, and the default (`""`, `client`) | `--levilamina=26.60.6` (the default) | `locks/26_60.lock` | `mods/` |
+| 26.51.x | 1.26.51 | `26_51` | `--levilamina=26.51.7` | `locks/26_51.lock` | `plugins/` |
+
+`xmake-requires.lock` is generated, not tracked: `tools/build.ps1` copies the lock of the line over it.
+The build defines `LP_LL_VERSION` (`2651`, `2660`). Guard a difference between lines with it, keep
+the guard as small as possible, never drop the older path, and prefer one unguarded path when the
+same API works on both lines. A warning `'X' is deprecated: This API is not available` means `X`
+became `MCNAPI` on that line: find another way instead of silencing it. Every line must build.
 
 The behaviour reference is `docs/SPEC.md`. Write it (blocks, items, mechanics, every screen, config,
 commands, strings) before the first feature unit, and read it before working on a unit.
@@ -153,21 +167,22 @@ pwsh -NoProfile -File tools/e2e/client/run.ps1 -Scenario smoke       # headless 
   waits for them. Headless input (Be.D.D.) is the default: the game runs in the
   background and never takes the real mouse/keyboard.
 - Worktrees under the main checkout: run xmake with `-P .` (as `tools/build.ps1` does), otherwise xmake
-  picks the parent checkout's project and builds there. If a build rewrites `xmake-requires.lock`
-  (repo commit bumps only), revert it: `git checkout xmake-requires.lock`.
+  picks the parent checkout's project and builds there. `xmake-requires.lock` is a copy of
+  `locks/<variant>.lock`; copy a deliberate package change back to the lock of that line.
 - Client remote modes download the RP from the BDS host; the harness drops the game's cached copy of
   Lepton's RP before every launch (same UUID/version in every dev build), so remote runs test this build's assets.
 - Client e2e: `full` (all selftests + handshake), `ui` (UI toolkit demo, screenshots), `net` (run with
   `-Mode local`, `remote-mod` and `remote-vanilla`: handshake, container screen, form fallback),
   `shapes` (generated shape gallery).
 
-Deploying by hand: copy `bin/server/Lepton` to `<BDS>/plugins/`, or `bin/client/Lepton` to
-`%APPDATA%\levilauncher.exe\versions\1.26.51.01\mods\`.
+Deploying by hand: copy `bin/server/Lepton` to `<BDS>/mods/` (LeviLamina 26.60) or `<BDS>/plugins/`
+(26.51), or `bin/client/Lepton` to `%APPDATA%\levilauncher.exe\versions\<game version>\mods\`.
 
 ## Bedrock / LeviLamina rules (learned the hard way)
 
-- Headers: `%LOCALAPPDATA%\.xmake\packages\l\levilamina\26.51.7\<hash>\include\{ll,mc}` (one hash per
-  target type). Check them before guessing a name or signature.
+- Headers: `%LOCALAPPDATA%\.xmake\packages\l\levilamina\<version>\<hash>\include\{ll,mc}` (one hash per
+  target type, one tree per line). Check them before guessing a name or signature, and diff the
+  trees of two lines before assuming an API is the same on both.
 - Callable: `MCAPI`, `MCFOLD`, `MCTAPI`, unmarked `virtual`. **Never** `MCNAPI`. `ll::TypedStorage`
   members are fields (`.get()`, `*`, `->`). Packets without an MCAPI constructor are created with
   `MinecraftPackets::createPacket(MinecraftPacketIds::X)` + `static_cast`; send with `pkt.sendTo(player)`.

@@ -32,6 +32,7 @@
 
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Inventory.h"
 #include "game/Items.h"
 #include "mod/Log.h"
@@ -435,7 +436,7 @@ void hoeHarvest(Player& player, BlockPos const& basePos, Block const& broken) {
             if (!region.hasChunksAt(p, 0, false)) continue;
             Block const& b = region.getBlock(p);
             if (!isHoeHarvestable(b)) continue;
-            if (b.getBlockType().getDestroySpeed() != 0.0f) nonInstant = true;
+            if (lp::game::hardness(b) != 0.0f) nonInstant = true;
             b.playerDestroy(player, p);
             destroyEffect(region, p, b);
             game::clearBlock(region, p);

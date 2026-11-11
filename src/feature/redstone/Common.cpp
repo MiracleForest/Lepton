@@ -44,6 +44,7 @@
 
 #include "game/BlockStates.h"
 #include "game/Blocks.h"
+#include "game/Compat.h"
 #include "game/Items.h"
 #include "game/WorldDb.h"
 #include "mod/Config.h"
@@ -256,7 +257,7 @@ LL_TYPE_INSTANCE_HOOK(
     // keep the loop going even if the game didn't re-queue (ticks queued natively are not looping)
     if (region.hasChunksAt(pos, 0, false)) {
         auto const& now = region.getBlock(pos);
-        if (now.getTypeName() == name && !region.hasTickInPendingTicks(pos, TickingQueueType::Internal))
+        if (now.getTypeName() == name && !lp::game::hasPendingTick(region, pos))
             region.addToTickingQueue(pos, now, 1, 0, false);
     }
 }
@@ -317,7 +318,7 @@ void ensureTicking(int dim, BlockPos pos) {
         auto const& b    = region->getBlock(pos);
         auto const& name = b.getTypeName();
         if (name != "lepton:redstone_randomizer" && name != "lepton:ender_watcher") return;
-        if (region->hasTickInPendingTicks(pos, TickingQueueType::Internal)) return;
+        if (lp::game::hasPendingTick(*region, pos)) return;
         region->addToTickingQueue(pos, b, 1, 0, false);
     });
 }
@@ -471,7 +472,7 @@ bool destroyBlock(BlockSource& region, BlockPos const& pos, bool drop) {
     auto level = ll::service::getLevel();
     if (!level) return false;
     BlockChangeContext ctx{};
-    return level->destroyBlock(region, pos, drop, ctx);
+    return lp::game::destroyBlock(*level, region, pos, drop, ctx);
 }
 
 void dropItem(BlockSource& region, BlockPos const& pos, std::string_view id, int count) {

@@ -1,7 +1,7 @@
 # A normal (non-flat) world with ClimateControlRemover (temperature and humidity off) and the
 # village spawn nerf (distance 1000000: practically every village is suppressed) turned on.
 Set-ServerProperties @{ 'level-type' = 'DEFAULT' }
-$cfgDir = Join-Path $script:SlotDir "plugins/$script:ModName/config"
+$cfgDir = Join-Path $script:SlotDir "$(Get-ModsDirName $script:SlotDir)/$script:ModName/config"
 New-Item -ItemType Directory -Force $cfgDir | Out-Null
 @'
 {
