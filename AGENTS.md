@@ -10,7 +10,7 @@ same name (see `lip.toml`), and `--levilamina` (`tools/build.ps1 -LeviLamina`) p
 
 | Line | Minecraft | Variant | Built against | Lock file | Server mods folder |
 | --- | --- | --- | --- | --- | --- |
-| 26.60.x | 1.26.60 | `26_60`, and the default (`""`, `client`) | `--levilamina=26.60.6` (the default) | `locks/26_60.lock` | `mods/` |
+| 26.60.x | 1.26.60 | `26_60`, and the default (`""`) | `--levilamina=26.60.6` (the default) | `locks/26_60.lock` | `mods/` |
 | 26.51.x | 1.26.51 | `26_51` | `--levilamina=26.51.7` | `locks/26_51.lock` | `plugins/` |
 
 `xmake-requires.lock` is generated, not tracked: `tools/build.ps1` copies the lock of the line over it.

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- The `client` variant. The variants are now the default, which is the newest line, and one per LeviLamina line,
+  `26_60` and `26_51`; each holds a server and a client build, and lip and LeviLauncher pick the one of the side they
+  install to. On a client, install `github.com/MiracleForest/Lepton` or `github.com/MiracleForest/Lepton#26_60`. An
+  install made as `#client` is not updated to this release: uninstall it
+  (`lip uninstall github.com/MiracleForest/Lepton#client`) and install one of the variants above. Your settings in
+  `mods/Lepton/config/` are kept.
+
 ## [0.2.0-beta.1] - 2026-11-11
 
 First beta of 0.2.0. Please report anything that behaves differently from 0.1.1.

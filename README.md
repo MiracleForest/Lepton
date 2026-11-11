@@ -41,10 +41,8 @@ lip install github.com/MiracleForest/Lepton          # the newest line (26.60)
 lip install github.com/MiracleForest/Lepton#26_51    # Minecraft 1.26.51
 ```
 
-`github.com/MiracleForest/Lepton#client`, the variant earlier releases of the client mod were installed as, is the newest line too.
-
 lip installs only one variant of Lepton at a time. To switch an installed Lepton to another line, uninstall it first
-(`lip uninstall github.com/MiracleForest/Lepton`, with the variant it was installed as, such as `#client`), then
+(`lip uninstall github.com/MiracleForest/Lepton`, with the variant it was installed as, such as `#26_51`), then
 install the other variant. Your settings in the `config` folder are kept.
 
 Or download the ZIP for your line and side from the [releases page](https://github.com/MiracleForest/Lepton/releases) (pre-releases such as betas are listed there too, but not under "Latest") and extract it into a `Lepton` folder, so that `Lepton/manifest.json` exists:
