@@ -1,0 +1,17 @@
+{
+  "lepton.misc.autowalking": "自动行走",
+  "lepton.misc.saturation0": "大餐",
+  "lepton.misc.saturation1": "饱餐",
+  "lepton.misc.saturation2": "普通餐",
+  "lepton.misc.saturation3": "简餐",
+  "lepton.misc.saturation4": "小吃",
+  "lepton.misc.saturation5": "全餐",
+  "lepton.misc.bad_saturation0": "烦扰满溢",
+  "lepton.misc.bad_saturation1": "过分丰盛",
+  "lepton.misc.bad_saturation2": "鲁莽大餐",
+  "lepton.misc.bad_saturation3": "可疑食粮",
+  "lepton.misc.bad_saturation4": "恶心小吃",
+  "lepton.misc.bad_saturation5": "危险诱惑",
+  "lepton.misc.shulker_box_shift": "按住Shift查看内容物",
+  "lepton.misc.map_shift": "按住Shift查看地图"
+}

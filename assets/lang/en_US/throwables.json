@@ -1,0 +1,9 @@
+{
+  "item.lepton.slime_in_a_bucket.named": "Bucket of {}",
+  "death.attack.lepton.pickarang": "{0} was surprised by {1}'s pickarang coming back around",
+  "lepton.subtitles.throw_pickarang": "Pickarang is flung",
+  "lepton.subtitles.clank_pickarang": "Pickarang clanks",
+  "lepton.subtitles.spark_pickarang": "Pickarang is reflected",
+  "lepton.subtitles.pickup_pickarang": "Pickarang is taken",
+  "lepton.subtitles.parrot_egg": "Parrot plops"
+}

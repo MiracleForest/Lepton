@@ -1,0 +1,10 @@
+{
+  "biome.lepton.glimmering_weald": "Glimmering Weald",
+  "lepton.jei.hint.glow_shroom": "Found in the rare Glimmering Weald biome deep underground. Bone Meal can be used to create a large variant.",
+  "lepton.jei.hint.glow_lichen_growth": "Found in the rare Glimmering Weald biome deep underground.",
+  "tag.item.lepton.glow_shroom_feedables": "Glow Shroom Stoneling Food",
+  "lp.worldsurface.monster_box": "Monster Box",
+  "lp.worldsurface.locate.found": "The nearest {0} is at {1} ({2} blocks away)",
+  "lp.worldsurface.locate.none": "Could not find a {0} within {1} blocks",
+  "lp.worldsurface.locate.unsupported": "{0} needs a normal (non-flat) Overworld"
+}

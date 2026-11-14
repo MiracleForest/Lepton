@@ -1,0 +1,65 @@
+Lepton
+Copyright (c) 2026 MiracleForest and the Lepton contributors
+
+Lepton is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike
+4.0 International License (CC BY-NC-SA 4.0). The full legal code is in the LICENSE
+file and at https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+
+-------------------------------------------------------------------------------
+Adapted material
+-------------------------------------------------------------------------------
+
+Lepton is an unofficial adaptation of Quark by Vazkii and the Quark contributors:
+
+  Quark, version 4.1-488 (tag release-4.1-488+1.21.1)
+  https://github.com/VazkiiMods/Quark
+  Licensed under Creative Commons Attribution-NonCommercial-ShareAlike 3.0
+  Unported (CC BY-NC-SA 3.0): https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+Parts of Quark's behaviour that Lepton reproduces (world generation cluster
+shapes and ore pockets, biome and dimension filters, the piston structure
+resolver, fuel values, dye recipes) are implemented in Quark's library Zeta,
+which Lepton also adapts:
+
+  Zeta, by Vazkii and the Zeta contributors
+  https://github.com/VazkiiMods/Zeta
+  Licensed under CC BY-NC-SA 3.0 Unported
+
+Lepton's code and text were developed with reference to the Quark and Zeta
+sources and are adaptations of them. Section 4(b) of CC BY-NC-SA 3.0 permits an
+adaptation to be distributed under a later version of that licence with the
+same License Elements (Attribution, NonCommercial, ShareAlike); Lepton is
+therefore distributed under CC BY-NC-SA 4.0.
+
+Changes made in this adaptation:
+
+  - Reimplemented for Minecraft Bedrock Edition as a native LeviLamina mod
+    written in C++, instead of a Java mod for Minecraft: Java Edition.
+  - Textures, models and other pack assets are new, made for Bedrock data
+    formats (resource and behavior packs); the textures are original pixel art
+    drawn by the scripts in tools/textures/.
+  - Configuration, commands and screens were redesigned for Bedrock (JSON
+    config files, Bedrock forms and UI); some modules were changed or left out
+    where Bedrock differs (see docs/SPEC.md).
+
+Lepton is not affiliated with, sponsored by, or endorsed by Vazkii, the Quark or
+Zeta projects, Mojang Studios or Microsoft. "Quark" is used only to identify the
+work this project adapts.
+
+-------------------------------------------------------------------------------
+NonCommercial
+-------------------------------------------------------------------------------
+
+Under the NonCommercial term of CC BY-NC-SA, Lepton and works based on it may
+not be used primarily for commercial advantage or monetary compensation. Do not
+sell it, put it behind a paywall, or distribute it in a way that is
+monetized (for example, download pages that are ad-supported or that require
+payment or a subscription).
+
+-------------------------------------------------------------------------------
+Third-party material
+-------------------------------------------------------------------------------
+
+No file in this repository carries a separate third-party licence.
+Dependencies such as LeviLamina are fetched at build time and are not part of
+this repository; they remain under their own licences.

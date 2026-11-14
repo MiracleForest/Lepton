@@ -1,0 +1,17 @@
+{
+  "lepton.misc.autowalking": "Auto-Walking",
+  "lepton.misc.saturation0": "Fulfilling Meal",
+  "lepton.misc.saturation1": "Hearty Meal",
+  "lepton.misc.saturation2": "Meal",
+  "lepton.misc.saturation3": "Light Meal",
+  "lepton.misc.saturation4": "Light Snack",
+  "lepton.misc.saturation5": "Full-Course Meal",
+  "lepton.misc.bad_saturation0": "Worryingly Fulfilling",
+  "lepton.misc.bad_saturation1": "Disturbingly Hearty",
+  "lepton.misc.bad_saturation2": "Ill-Advised Meal",
+  "lepton.misc.bad_saturation3": "Questionable Rations",
+  "lepton.misc.bad_saturation4": "Disgusting Snack",
+  "lepton.misc.bad_saturation5": "Dangerously Tantalizing",
+  "lepton.misc.shulker_box_shift": "Hold Shift to see contents",
+  "lepton.misc.map_shift": "Hold Shift to see the map"
+}

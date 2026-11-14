@@ -1,0 +1,11 @@
+{
+  "lepton.misc.repaired": "(Was Repaired)",
+  "lepton.readout.not_ingame": "Not ingame",
+  "lepton.readout.looking": "Looking at {}",
+  "lepton.readout.holding": "Holding {}x {}",
+  "lepton.readout.holding_with_off": "Holding {} {} and {} {}",
+  "lepton.readout.health": "Health {}",
+  "lepton.readout.food": "Food {}",
+  "lepton.readout.sign_says": ". Sign Says ",
+  "lepton.readout.no_item": "No item"
+}
