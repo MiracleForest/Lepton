@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-21
+
+### Fixed
+
+- The client entries for LeviLamina 26.60 (the default variant and `26_60`) depend on `github.com/LiteLDev/LeviLamina` 26.60.8 or later instead of `github.com/LiteLDev/LeviLamina#client`. LeviLamina 26.60.8 is a lip.toml package with no `client` variant, so the old dependency could only resolve to LeviLamina 26.60.7 or earlier: a client install could not use the newest LeviLamina 26.60, and failed on a client that already had LeviLamina 26.60.8 installed.
+
 ## [0.1.0] - 2026-11-14
 
 First release: small vanilla+ modules for Minecraft Bedrock Edition, for dedicated servers and local worlds. Every
@@ -53,5 +59,6 @@ screens. Bedrock limits are listed in [docs/SPEC.md §8](docs/SPEC.md#8-not-port
   kept but not shown. 1.26.51 is not affected.
 - On Minecraft 1.26.60, the `disableMushroomBlockRemoval` nerf has no effect.
 
-[Unreleased]: https://github.com/MiracleForest/Lepton/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/MiracleForest/Lepton/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/MiracleForest/Lepton/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/MiracleForest/Lepton/releases/tag/v0.1.0
